@@ -1,7 +1,7 @@
 class Settings::CourseFacultiesController < ApplicationController
   authorize_resource Setting
 
-  before_action :set_course_faculty, only: [:edit, :update, :destroy]
+  before_action :set_course_faculty, only: %i[edit update destroy]
 
   # GET /settings/course_faculties
   # GET /settings/course_faculties.json
@@ -15,8 +15,7 @@ class Settings::CourseFacultiesController < ApplicationController
   end
 
   # GET /settings/course_faculties/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /settings/course_faculties
   # POST /settings/course_faculties.json
@@ -54,13 +53,14 @@ class Settings::CourseFacultiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_course_faculty
-      @faculty = Courses::Faculty.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def faculty_params
-      params.require(:courses_faculty).permit(:name, :code)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_course_faculty
+    @faculty = Courses::Faculty.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def faculty_params
+    params.require(:courses_faculty).permit(:name, :code)
+  end
 end

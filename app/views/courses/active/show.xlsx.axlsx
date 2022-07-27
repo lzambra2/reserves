@@ -1,9 +1,9 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: "Items Report") do |sheet|
-  sheet.add_row ["Course ID", "Type", "Title", "Author",
-    "ISBN", "CALLNUMBER", "Publisher", "Publication Date",  "URL",
-    "Format", "Edition", "Journal Title", "Journal Page Number", "Journal Volume",
-    "Map Index Num", "Description"]
+wb.add_worksheet(name: 'Items Report') do |sheet|
+  sheet.add_row ['Course ID', 'Type', 'Title', 'Author',
+                 'ISBN', 'CALLNUMBER', 'Publisher', 'Publication Date', 'URL',
+                 'Format', 'Edition', 'Journal Title', 'Journal Page Number', 'Journal Volume',
+                 'Map Index Num', 'Description']
 
   course_code = @course.code
 
@@ -24,11 +24,7 @@ wb.add_worksheet(name: "Items Report") do |sheet|
     map_index = item.map_index_num
     desc = item.description
 
-
-
     sheet.add_row [course_code, type, title, author, isbn, callnumber, publisher, p_date,
-        url, format, edition, j_title, j_page, j_vol, map_index, desc]
-
-
+                   url, format, edition, j_title, j_page, j_vol, map_index, desc]
   end
 end

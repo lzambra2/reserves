@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Reserves::Ils::ConnectorTest < ActiveSupport::TestCase
-
   # should "throw a run time error if instantiating connector on its own" do
   #   assert_raises RuntimeError do
   #     Reserves::Ils::Connector.new

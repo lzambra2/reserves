@@ -11,9 +11,8 @@ class AcquisitionsMailer < ApplicationMailer
     @course = @request.course
     @user = current_user
 
-    if Setting.email_allow && ! Setting.email_acquisitions_to.blank?
+    if Setting.email_allow && !Setting.email_acquisitions_to.blank?
       mail to: email_address, cc: current_user.email, subject: Setting.email_acquisitions_subject
     end
   end
-
 end

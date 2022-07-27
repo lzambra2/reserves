@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :courses_faculty, class: 'Courses::Faculty' do
-    name "MyString"
-    code "MyString"
+    name 'MyString'
+    code 'MyString'
   end
 end

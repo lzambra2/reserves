@@ -1,18 +1,17 @@
 class AcquisitionRequestsController < ApplicationController
-  before_action :set_request, only: [:show, :edit, :update, :destroy, :change_status, :send_to_acquisitions]
+  before_action :set_request, only: %i[show edit update destroy change_status send_to_acquisitions]
   authorize_resource
 
   def index
-    @acquisition_requests = AcquisitionRequest.open.order("created_at desc")
-    @recently_acquired = AcquisitionRequest.acquired.limit(200).order("acquired_at desc")
-    @recently_cancelled = AcquisitionRequest.cancelled.limit(200).order("cancelled_at desc")
+    @acquisition_requests = AcquisitionRequest.open.order('created_at desc')
+    @recently_acquired = AcquisitionRequest.acquired.limit(200).order('acquired_at desc')
+    @recently_cancelled = AcquisitionRequest.cancelled.limit(200).order('cancelled_at desc')
 
     if current_user.role != User::MANAGER_ROLE
       @acquisition_requests = @acquisition_requests.by_location(current_user.location_id)
       @recently_acquired = @recently_acquired.by_location(current_user.location_id)
       @recently_cancelled = @recently_cancelled.by_location(current_user.location_id)
     end
-
   end
 
   def show
@@ -24,7 +23,6 @@ class AcquisitionRequestsController < ApplicationController
 
     @users = User.all
     @locations = Location.active
-
   end
 
   def new
@@ -33,9 +31,7 @@ class AcquisitionRequestsController < ApplicationController
     @request = @item.request
   end
 
-
-  def edit
-  end
+  def edit; end
 
   def create
     @acquisition_request = AcquisitionRequest.new(acquisition_request_params)
@@ -46,7 +42,10 @@ class AcquisitionRequestsController < ApplicationController
 
     respond_to do |format|
       if @acquisition_request.save
-        format.html { redirect_to acquisition_request_path(@acquisition_request), notice: 'Acquisition Request was successfully created.' }
+        format.html do
+          redirect_to acquisition_request_path(@acquisition_request),
+                      notice: 'Acquisition Request was successfully created.'
+        end
         format.js
       else
         format.html { render action: 'new' }
@@ -59,7 +58,10 @@ class AcquisitionRequestsController < ApplicationController
     @acquisition_request.audit_comment = "Updated an acquisition request for #{@acquisition_request.item.title}"
     respond_to do |format|
       if @acquisition_request.update(acquisition_request_params)
-        format.html { redirect_to acquisition_request_path(@acquisition_request), notice: 'Acquisition Request was successfully updated.' }
+        format.html do
+          redirect_to acquisition_request_path(@acquisition_request),
+                      notice: 'Acquisition Request was successfully updated.'
+        end
         format.js
       else
         format.html { render action: 'edit' }
@@ -97,11 +99,9 @@ class AcquisitionRequestsController < ApplicationController
     end
 
     redirect_to acquisition_request_path(@acquisition_request)
-
   end
 
   def send_to_acquisitions
-
     @acquisition_request.audit_comment = "Sent email to #{params[:which].humanize}. CC: #{current_user.email}"
     @acquisition_request.save(validate: false)
 
@@ -112,6 +112,7 @@ class AcquisitionRequestsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_request
     @acquisition_request = AcquisitionRequest.find(params[:id])
@@ -119,11 +120,7 @@ class AcquisitionRequestsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def acquisition_request_params
-
     params.require(:acquisition_request).permit(:item_id, :acquisition_reason,
-          :cancellation_reason, :acquisition_notes, :acquisition_source_type, :acquisition_source_name)
-
+                                                :cancellation_reason, :acquisition_notes, :acquisition_source_type, :acquisition_source_name)
   end
-
-
 end

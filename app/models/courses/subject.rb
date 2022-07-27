@@ -8,7 +8,7 @@ class Courses::Subject < ApplicationRecord
   validates_presence_of :code
 
   ## SCOPES
-  default_scope -> { order("code asc") }
+  default_scope -> { order('code asc') }
 
   ## methods
   def self.all_subjects
@@ -17,7 +17,7 @@ class Courses::Subject < ApplicationRecord
     combined = SUBJECTS + @all
     combined = combined.map { |c| c.upcase }.uniq
 
-    return combined.sort
+    combined.sort
 
     # if @all.size == 0
     #   return SUBJECTS

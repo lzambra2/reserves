@@ -5,7 +5,7 @@ class BibResult
                 :catalogue_record, :source, :language, :subject
 
   def self.process_primo_records(records)
-    return if records == nil
+    return if records.nil?
 
     results = []
     records.docs.each do |record|
@@ -20,7 +20,7 @@ class BibResult
   end
 
   def self.process_solr_records(records)
-    return if records == nil
+    return if records.nil?
 
     results = []
     records.each do |record|
@@ -30,82 +30,102 @@ class BibResult
     results
   end
 
-  def from_solr(record)
-
-  end
+  def from_solr(record); end
 
   def from_primo(record)
-    self.source = "primo"
+    self.source = 'primo'
     self.catalogue_record = record
 
-    self.title = get_value record[:pnx]["display"]["title"]
-    self.author = get_value record[:pnx]["sort"]["author"]
-    self.item_type = get_value record[:pnx]["display"]["type"]
-    self.description = get_value record[:pnx]["display"]["format"]
-    self.edition = get_value record[:pnx]["display"]["edition"]
-    self.publisher = get_value record[:pnx]["display"]["publisher"]
-    self.language = get_value record[:pnx]["display"]["language"] rescue "n/a"
-    self.subject = get_value record[:pnx]["display"]["subject"] rescue "n/a"
-    self.publication_date = get_value record[:pnx]["addata"]["date"]
-    self.callnumber = get_value record[:delivery]["holding"].first["callNumber"] rescue "n/a"
-    self.main_location = get_value record[:delivery]["holding"].first["mainLocation"] rescue "n/a"
-    self.isbn_issn = get_value record[:pnx]["addata"]["isbn"]
+    self.title = get_value record[:pnx]['display']['title']
+    self.author = get_value record[:pnx]['sort']['author']
+    self.item_type = get_value record[:pnx]['display']['type']
+    self.description = get_value record[:pnx]['display']['format']
+    self.edition = get_value record[:pnx]['display']['edition']
+    self.publisher = get_value record[:pnx]['display']['publisher']
+    self.language = begin
+      get_value record[:pnx]['display']['language']
+    rescue StandardError
+      'n/a'
+    end
+    self.subject = begin
+      get_value record[:pnx]['display']['subject']
+    rescue StandardError
+      'n/a'
+    end
+    self.publication_date = get_value record[:pnx]['addata']['date']
+    self.callnumber = begin
+      get_value record[:delivery]['holding'].first['callNumber']
+    rescue StandardError
+      'n/a'
+    end
+    self.main_location = begin
+      get_value record[:delivery]['holding'].first['mainLocation']
+    rescue StandardError
+      'n/a'
+    end
+    self.isbn_issn = get_value record[:pnx]['addata']['isbn']
 
     ## journals
-    self.isbn_issn = get_value record[:pnx]["addata"]["issn"] if isbn_issn.blank?
-    self.journal_title = get_value record[:pnx]["addata"]["jtitle"]
-    self.volume = get_value record[:pnx]["addata"]["volume"]
-    self.issue = get_value record[:pnx]["addata"]["issue"]
-    self.page_number = get_value(record[:pnx]["addata"]["spage"]) + " " + get_value(record[:pnx]["addata"]["epage"])
-    self.url = get_value record[:pnx]["addata"]["url"]
+    self.isbn_issn = get_value record[:pnx]['addata']['issn'] if isbn_issn.blank?
+    self.journal_title = get_value record[:pnx]['addata']['jtitle']
+    self.volume = get_value record[:pnx]['addata']['volume']
+    self.issue = get_value record[:pnx]['addata']['issue']
+    self.page_number = get_value(record[:pnx]['addata']['spage']) + ' ' + get_value(record[:pnx]['addata']['epage'])
+    self.url = get_value record[:pnx]['addata']['url']
 
-    self.rtype = get_value record[:pnx]["search"]["rsrctype"] rescue nil
-
-  end
-
-  def get_value(value)
-    if value == nil
-      return ""
-    elsif value.is_a? Array
-      if value.size > 1
-        return value.join(", ") rescue "n/a"
-      else
-        return value.try :first rescue "n/a"
-      end
-    else
-      return value
+    self.rtype = begin
+      get_value record[:pnx]['search']['rsrctype']
+    rescue StandardError
+      nil
     end
   end
 
-
-  def to_json
-    require 'json'
-
-    json = JSON.generate(
-      { title: self.title,
-        author: self.author,
-        isbn_issn: self.isbn_issn,
-        callnumber: self.callnumber,
-        publication_date: self.publication_date,
-        publisher: self.publisher,
-        edition: self.edition,
-        item_type: self.item_type,
-        format: self.format,
-        map_index_num: self.map_index_num,
-        journal_title: self.journal_title,
-        volume: self.volume,
-        page_number: self.page_number,
-        issue: self.issue,
-        ils_barcode: self.ils_barcode,
-        ils_id: self.ils_id,
-        description: self.description,
-        main_location: self.main_location,
-        url: self.url,
-        rtype: self.rtype
-      }
-    )
-
-    json
+  def get_value(value)
+    if value.nil?
+      ''
+    elsif value.is_a? Array
+      if value.size > 1
+        begin
+          value.join(', ')
+        rescue StandardError
+          'n/a'
+        end
+      else
+        begin
+          value.try :first
+        rescue StandardError
+          'n/a'
+        end
+      end
+    else
+      value
+    end
   end
 
+  def to_json(*_args)
+    require 'json'
+
+    JSON.generate(
+      { title: title,
+        author: author,
+        isbn_issn: isbn_issn,
+        callnumber: callnumber,
+        publication_date: publication_date,
+        publisher: publisher,
+        edition: edition,
+        item_type: item_type,
+        format: self.format,
+        map_index_num: map_index_num,
+        journal_title: journal_title,
+        volume: volume,
+        page_number: page_number,
+        issue: issue,
+        ils_barcode: ils_barcode,
+        ils_id: ils_id,
+        description: description,
+        main_location: main_location,
+        url: url,
+        rtype: rtype }
+    )
+  end
 end
