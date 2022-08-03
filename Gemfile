@@ -73,6 +73,7 @@ gem 'populator', git: 'https://github.com/ryanb/populator.git'
 
 group :test do
   gem 'bullet' # Testing SQL queries
+  gem 'byebug'
   gem 'capybara', '2.1.0'
   gem 'database_cleaner', '1.2.0'
   gem 'factory_girl_rails', '4.3.0'
