@@ -55,8 +55,8 @@ class RequestMailerTest < ActionMailer::TestCase
 
     user = create(:user)
     request = create(:request, requester: user)
-    request.update_attribute(:requester_email, nil)
-    user.update_attribute(:email, nil)
+    request.update(requester_email: nil)
+    user.update(email: nil)
 
     user.reload
     assert_nil user.email, 'Email should be nil'
@@ -73,7 +73,7 @@ class RequestMailerTest < ActionMailer::TestCase
 
     user = create(:user)
     request = create(:request, requester: user)
-    request.update_attribute(:requester_email, 'test@test.com')
+    request.update(requester_email: 'test@test.com')
 
     mail = RequestMailer.expiry_notice(request, nil)
     assert_equal 2, mail.to.size, 'Should be two emails'

@@ -100,7 +100,7 @@ class RequestsControllerTest < ActionDispatch::IntegrationTest
       r = get_instance_var(:request)
       assert_equal Request::OPEN, r.status, 'Should be open after being completed'
 
-      request.update_attribute(:status, Request::CANCELLED)
+      request.update(status: Request::CANCELLED)
 
       get change_status_request_path(request), params: { status: Request::OPEN }
       r = get_instance_var(:request)
@@ -114,7 +114,7 @@ class RequestsControllerTest < ActionDispatch::IntegrationTest
       r = get_instance_var(:request)
       assert_equal Request::COMPLETED, r.status, 'Nothing has changed'
 
-      request.update_attribute(:status, Request::CANCELLED)
+      request.update(status: Request::CANCELLED)
       get change_status_request_path(request), params: { status: Request::COMPLETED }
       r = get_instance_var(:request)
       assert_equal Request::CANCELLED, r.status, 'Request remains cancelled'

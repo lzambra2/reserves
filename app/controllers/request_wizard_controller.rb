@@ -15,8 +15,8 @@ class RequestWizardController < ApplicationController
   def save
     @request = Request.new(request_params)
     @request.status = Request::INCOMPLETE
-    current_user.update_attributes(office: params[:request][:user][:office], department: params[:request][:user][:department],
-                                   phone: params[:request][:user][:phone])
+    current_user.update(office: params[:request][:user][:office], department: params[:request][:user][:department],
+                         phone: params[:request][:user][:phone])
 
     @request.requester_id = current_user.id
 

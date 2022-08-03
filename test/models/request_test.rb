@@ -99,7 +99,7 @@ class RequestTest < ActiveSupport::TestCase
   should 'rollover request, only active items' do
     r = create(:request) # with items
     items = create_list(:item, 3, request_id: r.id)
-    deleted_item = items.first.update_attribute(:status, Item::STATUS_DELETED)
+    deleted_item = items.first.update(status: Item::STATUS_DELETED)
 
     request = r.rollover
 

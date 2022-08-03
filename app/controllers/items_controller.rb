@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        @request.update_attribute(:status, Request::OPEN)
+        @request.update(status: Request::OPEN)
         RequestMailer.new_item_notification(@request, @item).deliver_later
 
         format.html { redirect_to [@request, @item], notice: 'Item was successfully created.' }

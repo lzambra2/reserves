@@ -98,11 +98,11 @@ class Request < ApplicationRecord
     ## rollover course
     course = self.course.rollover(course_year, course_term, course_section, course_credits)
 
-    nr.update_attribute(:course_id, course.id)
+    nr.update(course_id: course.id)
 
     # change it's status to UPCYCLED
     self.audit_comment = "Rolling over request and settings this request to #{UPCYCLED} status"
-    update_attribute(:status, UPCYCLED)
+    update(status: UPCYCLED)
 
     nr
   end

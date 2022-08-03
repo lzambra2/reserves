@@ -23,8 +23,8 @@ class RequestsController < ApplicationController
     @request.audit_comment = 'Request Updated'
     respond_to do |format|
       if params[:request][:user]
-        @request.requester.update_attributes(office: params[:request][:user][:office],
-                                             department: params[:request][:user][:department], phone: params[:request][:user][:phone])
+        @request.requester.update(office: params[:request][:user][:office],
+                                  department: params[:request][:user][:department], phone: params[:request][:user][:phone])
       end
       # params[:audit_comment] = "Updated Request"
       if @request.update(request_params)
@@ -54,21 +54,21 @@ class RequestsController < ApplicationController
     notice = "Status changed to #{status}"
     case status
     when Request::OPEN
-      # ret = @request.update_attributes()
+      # ret = @request.updates()
       if @request.assigned_to
         @request.audit_comment = "Request has been Re-opened, status changed to #{status} and request has been unassigned"
-        @request.update_attribute(:status, status)
-        @request.update_attribute(:assigned_to, nil)
+        @request.update(status: status)
+        @request.update(assigned_to: nil)
         notice = "Status changed to #{status} and request has been unassigned"
       else
-        @request.update_attribute(:status, status)
+        @request.update(status: status)
       end
       RequestMailer.status_change(@request, current_user).deliver_later
     when Request::INPROGRESS
-      @request.update_attributes(status: status, assigned_to_id: current_user.id)
+      @request.update(status: status, assigned_to_id: current_user.id)
       # RequestMailer.status_change(@request, current_user).deliver_later
     when Request::COMPLETED
-      @request.update_attributes(status: status, completed_date: Date.today) if @request.status != Request::CANCELLED
+      @request.update(status: status, completed_date: Date.today) if @request.status != Request::CANCELLED
       RequestMailer.status_change(@request, current_user).deliver_later
     when Request::CANCELLED
       if @request.status != Request::COMPLETED
@@ -126,7 +126,7 @@ class RequestsController < ApplicationController
 
     name = u.nil? ? 'Unassigned' : u.name
     @request.audit_comment = "Request assigned to #{name}"
-    @request.update_attributes(assigned_to_id: id)
+    @request.update(assigned_to_id: id)
     redirect_to request_path(@request), notice: "Assigned to #{name}"
   end
 
@@ -139,7 +139,7 @@ class RequestsController < ApplicationController
     course_credits = params[:rollover] ? params[:rollover][:course_credits] : ''
     course_student_count = params[:rollover] ? params[:rollover][:course_student_count] : ''
     @new_request = @request.rollover(course_year, course_term, course_section, course_credits)
-    @new_request.course.update_attribute :student_count, course_student_count
+    @new_request.course.update :student_count, course_student_count
 
     redirect_to edit_request_path(@new_request), notice: 'Your item(s) will be kept on reserve.'
   end
