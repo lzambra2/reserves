@@ -1,34 +1,82 @@
-@import "twitter/bootstrap/variables";
-@import "twitter/bootstrap/mixins";
-
-
 .dashboard {
-
 	.nav {
-	 a { opacity: 0.53;  &:hover { opacity: 1;  } }
-	 .active a { opacity: 1; }
+		a {
+			opacity: 0.53;
 
-	 margin-bottom: 20px;
- 	}
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+		.active a {
+			opacity: 1;
+		}
+
+		margin-bottom: 20px;
+	}
 
 	.table {
-		.id { font-size: 12px; font-weight: bold; max-width: 60px; text-align: center; }
-		.requested_date { font-size: 12px; min-width: 90px; }
+		.id {
+			font-size: 12px;
+			font-weight: bold;
+			max-width: 60px;
+			text-align: center;
+		}
+
+		.requested_date {
+			font-size: 12px;
+			min-width: 90px;
+		}
 
 		.course {
-			.rollover { font-size: 9px;     font-weight: 200 !important; }
-			.name { font-size: 15px; line-height: 20px; }
-			.code { font-size: 12px; display: block; color: #767676;  padding-top: 4px}
+			.rollover {
+				font-size: 9px;
+				font-weight: 200 !important;
+			}
+
+			.name {
+				font-size: 15px;
+				line-height: 20px;
+			}
+
+			.code {
+				font-size: 12px;
+				display: block;
+				color: #767676;
+				padding-top: 4px
+			}
 		}
 
-		.items { .title, a { font-size: 13px; display: block; line-height: 18px; } }
+		.items {
+
+			.title,
+			a {
+				font-size: 13px;
+				display: block;
+				line-height: 18px;
+			}
+		}
 
 		.requestor {
-			.name { font-size: 15px; padding-bottom: 4px; display: block; }
-			.department { font-size: 12px; display: block; color: #767676;}
+			.name {
+				font-size: 15px;
+				padding-bottom: 4px;
+				display: block;
+			}
+
+			.department {
+				font-size: 12px;
+				display: block;
+				color: #767676;
+			}
 		}
 
-		.needs_attention_soon { background: #f9ecd9 }
-		.needs_attention_now { background: #fde6e6 }
+		.needs_attention_soon {
+			background: #f9ecd9
+		}
+
+		.needs_attention_now {
+			background: #fde6e6
+		}
 	}
 }

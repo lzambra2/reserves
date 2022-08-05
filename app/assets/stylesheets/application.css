@@ -11,6 +11,6 @@
  *= require jquery-ui/datepicker
  *= require font-awesome
  * require dataTables/bootstrap/3/jquery.dataTables.bootstrap
- *= require_self
  *= require_tree .
+ *= require_self
  */

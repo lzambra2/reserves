@@ -18,37 +18,37 @@
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/autocomplete
 //= require jquery-ui/effects/effect-highlight
-//= require bootstrap
+//= require_self
 //= require_tree .
 
 
-$(document).ready(function(){
+$(document).ready(function () {
 
-   $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
 
-	 $("form").on("click", ".remove_fields", function(event) {
-		 var parent = $(this).parents(".fields_for");
-		 $(parent).find('input.remove_field').val('1');
-		 $(this).closest('.fields_for').hide();
-		 event.preventDefault();
-	 });
+	$("form").on("click", ".remove_fields", function (event) {
+		var parent = $(this).parents(".fields_for");
+		$(parent).find('input.remove_field').val('1');
+		$(this).closest('.fields_for').hide();
+		event.preventDefault();
+	});
 
-	 $("form").on("click", ".add_fields", function(event) {
-		 event.preventDefault();
-		 var time = new Date().getTime();
-		 regexp = new RegExp($(this).data("id"), "g");
-		 var attach_to = $(this).data("attach-to");
-		 console.log(attach_to);
+	$("form").on("click", ".add_fields", function (event) {
+		event.preventDefault();
+		var time = new Date().getTime();
+		regexp = new RegExp($(this).data("id"), "g");
+		var attach_to = $(this).data("attach-to");
+		console.log(attach_to);
 
-		 if (attach_to) {
+		if (attach_to) {
 			$(attach_to).prepend($(this).data('fields').replace(regexp, time));
-			$(attach_to).find(".fields_for:first-child").effect("highlight",2000);
+			$(attach_to).find(".fields_for:first-child").effect("highlight", 2000);
 
-		 } else {
-		 	 $(this).before($(this).data('fields').replace(regexp, time));
-		 }
+		} else {
+			$(this).before($(this).data('fields').replace(regexp, time));
+		}
 
 
-   });
+	});
 
 });
