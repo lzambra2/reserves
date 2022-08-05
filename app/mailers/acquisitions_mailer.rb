@@ -1,6 +1,6 @@
 class AcquisitionsMailer < ApplicationMailer
-  add_template_helper(ItemsHelper)
-  add_template_helper(RequestsHelper)
+  helper ItemsHelper
+  helper RequestsHelper
 
   def send_acquisition_request(acquisition_request, current_user, email_address)
     @template = Liquid::Template.parse(Setting.email_acquisitions_body)
