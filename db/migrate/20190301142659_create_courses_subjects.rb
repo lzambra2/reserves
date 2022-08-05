@@ -3,7 +3,7 @@ class CreateCoursesSubjects < ActiveRecord::Migration[5.1]
     create_table :courses_subjects do |t|
       t.string :name
       t.string :code
-      
+
       t.timestamps
     end
   end

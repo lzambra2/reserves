@@ -2,7 +2,7 @@ require 'alma'
 require 'primo'
 
 Alma.configure do |config|
-  if defined?(Setting) 
+  if defined?(Setting)
     config.apikey = Setting.alma_apikey
     config.region = Setting.alma_region
   end

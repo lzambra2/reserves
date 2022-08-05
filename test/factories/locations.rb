@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :location do
-    name "Some Location Name"
-    contact_email "somecontact@email.com"
-    contact_phone "416-222-3333"
-    address "123 Fake Street"
+    name 'Some Location Name'
+    contact_email 'somecontact@email.com'
+    contact_phone '416-222-3333'
+    address '123 Fake Street'
     disallowed_item_types nil
     acquisitions_email nil
     # association :department, factory: :department

@@ -1,10 +1,9 @@
 module RequestsHelper
-
-  def comm_email(request)
-    if @request.requester_email == nil
-      return @request.requester.email
+  def comm_email(_request)
+    if @request.requester_email.nil?
+      @request.requester.email
     else
-      return @request.requester_email
+      @request.requester_email
     end
   end
 
@@ -15,9 +14,9 @@ module RequestsHelper
   def open_request_needs_attention_css?(r)
     if is_request_active(r)
       if 4.weeks.ago > r.created_at
-        return "needs_attention_now"
+        'needs_attention_now'
       elsif 2.weeks.ago > r.created_at
-        return "needs_attention_soon"
+        'needs_attention_soon'
       end
     end
   end

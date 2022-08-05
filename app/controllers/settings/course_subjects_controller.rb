@@ -1,7 +1,7 @@
 class Settings::CourseSubjectsController < ApplicationController
   authorize_resource Setting
 
-  before_action :set_course_subject, only: [:edit, :update, :destroy]
+  before_action :set_course_subject, only: %i[edit update destroy]
 
   # GET /settings/course_subjects
   # GET /settings/course_subjects.json
@@ -15,8 +15,7 @@ class Settings::CourseSubjectsController < ApplicationController
   end
 
   # GET /settings/course_subjects/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /settings/course_subjects
   # POST /settings/course_subjects.json
@@ -54,13 +53,14 @@ class Settings::CourseSubjectsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_course_subject
-      @subject = Courses::Subject.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def subject_params
-      params.require(:courses_subject).permit(:name, :code)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_course_subject
+    @subject = Courses::Subject.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def subject_params
+    params.require(:courses_subject).permit(:name, :code)
+  end
 end

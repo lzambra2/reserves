@@ -1,26 +1,80 @@
-@import "twitter/bootstrap/variables";
-@import "twitter/bootstrap/mixins";
-
 .request_history {
 
-	.type-request { background-color: #7a4a77; color: #fff; }
-	.type-item { background-color: #a60; color: #fff; }
-	.type-user { background-color: #ADD8E6; color: #000; }
-	.type-course { background-color: #F0E68C; color: #000; }
-	.type-note { background-color: #17874d; color: #fff; }
+	.type-request {
+		background-color: #7a4a77;
+		color: #fff;
+	}
+
+	.type-item {
+		background-color: #a60;
+		color: #fff;
+	}
+
+	.type-user {
+		background-color: #ADD8E6;
+		color: #000;
+	}
+
+	.type-course {
+		background-color: #F0E68C;
+		color: #000;
+	}
+
+	.type-note {
+		background-color: #17874d;
+		color: #fff;
+	}
 
 
 	.table {
-		.time, .what { font-size: 13px; text-align: center; max-width: 20%; }
-		.what { font-size: 12px; max-width: 52px;  }
-		.comment { font-size: 13px; cursor: pointer;}
-		.note { font-size: 14px; max-width: 100px; word-wrap: break-word;}
-		.who { text-align: right; font-size: 11px; color: #563D7C;  span { border-left: 4px solid #ddd; padding-left: 5px; } }
+
+		.time,
+		.what {
+			font-size: 13px;
+			text-align: center;
+			max-width: 20%;
+		}
+
+		.what {
+			font-size: 12px;
+			max-width: 52px;
+		}
+
+		.comment {
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		.note {
+			font-size: 14px;
+			max-width: 100px;
+			word-wrap: break-word;
+		}
+
+		.who {
+			text-align: right;
+			font-size: 11px;
+			color: #563D7C;
+
+			span {
+				border-left: 4px solid #ddd;
+				padding-left: 5px;
+			}
+		}
 
 		.more-info {
-			td { border-top: none; }
-			.changes { font-size: 12px; border-top: none;  }
-			.what {font-size: 11px; }
+			td {
+				border-top: none;
+			}
+
+			.changes {
+				font-size: 12px;
+				border-top: none;
+			}
+
+			.what {
+				font-size: 11px;
+			}
 		}
 	}
 
@@ -28,5 +82,7 @@
 }
 
 #history_popup {
-	.modal-dialog  {width:900px;}
+	.modal-dialog {
+		width: 900px;
+	}
 }

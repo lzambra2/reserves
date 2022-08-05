@@ -4,27 +4,26 @@ FactoryGirl.define do
   factory :item do
     association :request, factory: :request
 
-
     metadata_source Item::METADATA_MANUAL
     status Item::STATUS_NOT_READY
-    loan_period "2 Hours"
+    loan_period '2 Hours'
 
-    title "WOOT"
-    author "John McCain"
-    isbn "97811222"
-    callnumber "AB 1010 AB78"
-    description "Woot Book"
-    publication_date "2014"
-    publisher "Random House"
+    title 'WOOT'
+    author 'John McCain'
+    isbn '97811222'
+    callnumber 'AB 1010 AB78'
+    description 'Woot Book'
+    publication_date '2014'
+    publisher 'Random House'
     item_type Item::TYPE_BOOK
-    edition "1st ed."
+    edition '1st ed.'
     format Item::FORMAT_BOOK
     map_index_num nil
     url nil
     copyright_options nil
     other_copyright_options nil
 
-    ils_barcode ""
+    ils_barcode ''
 
     issue nil
     journal_title nil

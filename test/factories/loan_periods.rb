@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :loan_period do
-    duration "2 Hours"
+    duration '2 Hours'
   end
 end

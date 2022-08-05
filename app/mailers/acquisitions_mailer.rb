@@ -1,6 +1,6 @@
 class AcquisitionsMailer < ApplicationMailer
-  add_template_helper(ItemsHelper)
-  add_template_helper(RequestsHelper)
+  helper ItemsHelper
+  helper RequestsHelper
 
   def send_acquisition_request(acquisition_request, current_user, email_address)
     @template = Liquid::Template.parse(Setting.email_acquisitions_body)
@@ -11,9 +11,8 @@ class AcquisitionsMailer < ApplicationMailer
     @course = @request.course
     @user = current_user
 
-    if Setting.email_allow && ! Setting.email_acquisitions_to.blank?
+    if Setting.email_allow && !Setting.email_acquisitions_to.blank?
       mail to: email_address, cc: current_user.email, subject: Setting.email_acquisitions_subject
     end
   end
-
 end
