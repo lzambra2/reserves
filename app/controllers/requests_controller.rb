@@ -139,7 +139,7 @@ class RequestsController < ApplicationController
     course_credits = params[:rollover] ? params[:rollover][:course_credits] : ''
     course_student_count = params[:rollover] ? params[:rollover][:course_student_count] : ''
     @new_request = @request.rollover(course_year, course_term, course_section, course_credits)
-    @new_request.course.update :student_count, course_student_count
+    @new_request.course.update(student_count: course_student_count)
 
     redirect_to edit_request_path(@new_request), notice: 'Your item(s) will be kept on reserve.'
   end
