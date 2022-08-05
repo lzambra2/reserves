@@ -52,15 +52,12 @@ class RequestMailerTest < ActionMailer::TestCase
 
   should 'not send email if requester_email or request.requester.email are blank' do
     Setting.email_allow = true
-
     user = create(:user)
     request = create(:request, requester: user)
     request.update(requester_email: nil)
     user.update(email: nil)
 
-    user.reload
     assert_nil user.email, 'Email should be nil'
-    request.reload
     assert_nil request.requester_email, 'Should be nil as well'
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
