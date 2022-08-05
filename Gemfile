@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
 ## RAILS and related ##
-gem 'puma', '~> 3.7'
-gem 'rails', '6.1'
+gem 'puma', '~> 5.6', '>= 5.6.4'
+gem 'rails', '~> 7.0', '>= 7.0.3.1'
 
 ## RAILS related ##
 gem 'bcrypt-ruby', '~> 3.1.2'
@@ -31,7 +31,7 @@ gem 'font-awesome-rails', '~> 4.7'
 gem 'simple_form', '~> 5.1'
 
 ## TOOLS AND UTILITIES ##
-gem 'audited', '~> 4.5'
+gem 'audited', '~> 5.0'
 gem 'cancancan', '2.0.0'
 gem 'email_validator', '1.4.0'
 gem 'kaminari', '0.17.0'
@@ -63,7 +63,7 @@ gem 'mini_magick', '3.7.0'
 gem 'yaml_db', '~> 0.7.0'
 
 # NOTIFICATIONS
-gem 'exception_notification', '4.0.1'
+gem 'exception_notification', '~> 4.4', '>= 4.4.1'
 
 ## TESTING && DEVELOPMENT ##
 gem 'awesome_print', '1.8.0'
