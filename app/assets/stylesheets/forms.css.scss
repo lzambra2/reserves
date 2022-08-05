@@ -1,0 +1,72 @@
+form {
+  .field_with_errors {
+    padding: 2px;
+    background-color: #F2473F;
+    color: #fff;
+  }
+
+  label {
+    font-size: 12px;
+    display: block;
+
+    abbr[title] {
+      color: #e00;
+      border-bottom: none;
+    }
+
+    abbr {
+      display: none;
+    }
+
+    &.inline_checkbox_label {
+      display: inline-block;
+      margin: 10px 10px 0 0 !important;
+    }
+
+
+  }
+
+  input.required,
+  select.required {
+    background: #fff url(/assets/required_asterisk.png) no-repeat 1px 2px;
+  }
+
+
+
+  .form-array-control {
+    margin-left: 5px;
+    margin: 5px 5px 5px 0;
+    padding: 3px 5px;
+    width: 100%;
+  }
+
+
+
+}
+
+ul.ui-autocomplete {
+  position: absolute;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: solid 1px #999;
+  cursor: default;
+
+  li {
+    background-color: #FFF;
+    border-top: solid 1px #DDD;
+    margin: 0;
+    padding: 0;
+
+    a {
+      color: #000;
+      display: block;
+      padding: 3px;
+    }
+
+    a.ui-state-hover,
+    a.ui-state-active {
+      background-color: #FFFCB2;
+    }
+  }
+}

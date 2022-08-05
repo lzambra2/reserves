@@ -1,55 +1,52 @@
 class Request < ApplicationRecord
-
   ## searchable Concern
   include Searchable
 
-
   ## CONSTANTS
-  INCOMPLETE="incomplete"
-  OPEN = "open"
-  INPROGRESS = "in progress"
-  COMPLETED = "completed"
-  CANCELLED = "cancelled"
-  REMOVED = "removed"
-  UPCYCLED = "upcycled"
+  INCOMPLETE = 'incomplete'
+  OPEN = 'open'
+  INPROGRESS = 'in progress'
+  COMPLETED = 'completed'
+  CANCELLED = 'cancelled'
+  REMOVED = 'removed'
+  UPCYCLED = 'upcycled'
   STATUSES = [OPEN, INPROGRESS, COMPLETED, CANCELLED]
 
   OPEN_STATUSES = [INCOMPLETE, OPEN]
   VISIBLE_STATUSES = [OPEN, INPROGRESS, COMPLETED, UPCYCLED]
   CLOSED_STATUSES = [INPROGRESS, COMPLETED, CANCELLED, REMOVED, UPCYCLED]
 
-
   ## RELATIONS
   has_many :items, inverse_of: :request
 
   belongs_to :course
-  belongs_to :reserve_location, class_name: "Location", foreign_key: "reserve_location_id"
+  belongs_to :reserve_location, class_name: 'Location', foreign_key: 'reserve_location_id'
 
-  belongs_to :requester, foreign_key: "requester_id",  class_name: "User"
-  belongs_to :assigned_to, foreign_key: "assigned_to_id", class_name: "User"
-  belongs_to :archiver, foreign_key: "removed_by_id", class_name: "User"
+  belongs_to :requester, foreign_key: 'requester_id', class_name: 'User'
+  belongs_to :assigned_to, foreign_key: 'assigned_to_id', class_name: 'User'
+  belongs_to :archiver, foreign_key: 'removed_by_id', class_name: 'User'
 
-  belongs_to :rollover_parent, foreign_key: "rollover_parent_id", class_name: "Request"
-  has_many :rollovers, foreign_key: "rollover_parent_id", class_name: "Request"
+  belongs_to :rollover_parent, foreign_key: 'rollover_parent_id', class_name: 'Request'
+  has_many :rollovers, foreign_key: 'rollover_parent_id', class_name: 'Request'
 
   # audited only: [:status, :assigned_to]
 
   # audited #:comment_required => true
-  audited :associated_with => :course
+  audited associated_with: :course
   has_associated_audits
 
   ## VALIDATIONS
 
   # :requester_id, :course_id, :item_id ,:assigned_to_id, :department_id,
-  validates_presence_of :reserve_start_date, :reserve_location_id, :course, :reserve_end_date, message: "Cannot be empty"
-  validates_presence_of :requester_id, message: "Must set a requester"
-  validates :requester_email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i , allow_blank: true}
+  validates_presence_of :reserve_start_date, :reserve_location_id, :course, :reserve_end_date,
+                        message: 'Cannot be empty'
+  validates_presence_of :requester_id, message: 'Must set a requester'
+  validates :requester_email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, allow_blank: true }
 
   # NESTING
   accepts_nested_attributes_for :items, allow_destroy: true
   accepts_nested_attributes_for :course, allow_destroy: true
   accepts_nested_attributes_for :requester, allow_destroy: false
-
 
   ## SCOPES
   scope :incomplete, -> { where(status: INCOMPLETE) }
@@ -59,11 +56,12 @@ class Request < ApplicationRecord
   scope :cancelled, -> { where(status: CANCELLED) }
   scope :removed, -> { where(status: REMOVED) }
   scope :upcycled, -> { where(status: UPCYCLED) }
-  scope :visible, -> { where("status IN (?)", VISIBLE_STATUSES) }
-  scope :expiring_soon, -> (expire_date = (Time.now + Setting.request_expiry_notice_interval.to_i)) { where("requests.reserve_end_date <= ? ", expire_date ).where(status: COMPLETED) }
+  scope :visible, -> { where('status IN (?)', VISIBLE_STATUSES) }
+  scope :expiring_soon, lambda { |expire_date = (Time.now + Setting.request_expiry_notice_interval.to_i)|
+                          where('requests.reserve_end_date <= ? ', expire_date).where(status: COMPLETED)
+                        }
 
   scope :rollovers, -> { where.not(rollover_parent_id: nil) }
-
 
   def location
     reserve_location
@@ -71,12 +69,11 @@ class Request < ApplicationRecord
 
   ####### HELPER METHODS #########
   def rolledover?
-    self.rollover_parent != nil
+    rollover_parent != nil
   end
 
-
   ### Rollover Method makes a new request and copies required data from this one, including items
-  def rollover(course_year = "", course_term = "", course_section = "", course_credits="")
+  def rollover(course_year = '', course_term = '', course_section = '', course_credits = '')
     ## copy request
 
     nr = Request.new
@@ -89,30 +86,30 @@ class Request < ApplicationRecord
     nr.status = OPEN
     nr.rollover_parent_id = self[:id]
     nr.rolledover_at = DateTime.now
-    nr.audit_comment = "Rolledover request"
+    nr.audit_comment = 'Rolledover request'
 
     nr.save(validate: false)
 
     ## rollover items
-    self.items.active.each do |i|
+    items.active.each do |i|
       i.rollover(nr.id)
     end
 
     ## rollover course
     course = self.course.rollover(course_year, course_term, course_section, course_credits)
 
-    nr.update_attribute(:course_id, course.id)
+    nr.update(course_id: course.id)
 
     # change it's status to UPCYCLED
     self.audit_comment = "Rolling over request and settings this request to #{UPCYCLED} status"
-    update_attribute(:status, UPCYCLED)
+    update(status: UPCYCLED)
 
-    return nr
+    nr
   end
 
-  def self.mass_archive(user_id = 0, archive=true)
+  def self.mass_archive(user_id = 0, archive = true)
     expire_date = Date.today - (Setting.request_archive_all_after.to_i / 60 / 60 / 24).days
-    requests = Request.completed.where("requests.reserve_end_date <= ? ", expire_date)
+    requests = Request.completed.where('requests.reserve_end_date <= ? ', expire_date)
 
     requests.each do |request|
       request.status = Request::REMOVED
@@ -121,36 +118,34 @@ class Request < ApplicationRecord
       request.save(validate: false) if archive
     end
 
-    return requests
+    requests
   end
 
   def self.remove_incomplete(remove = false)
     expire_date = Date.today - (Setting.request_remove_incomplete_after.to_i / 60 / 60 / 24).days
-    requests = Request.incomplete.where("created_at <= ?", expire_date)
+    requests = Request.incomplete.where('created_at <= ?', expire_date)
 
     requests.each do |request|
       request.destroy! if remove
     end
 
-    return requests
-
+    requests
   end
-
 
   ### ELASRTIC SEARCH HELPERS ##
   def short_course_code
-    self.course != nil ? "#{self.course.subject} #{self.course.course_id}" : ""
+    !course.nil? ? "#{course.subject} #{course.course_id}" : ''
   end
 
   def instructor_name
-    self.course != nil ? "#{self.course.instructor}" : ""
+    !course.nil? ? "#{course.instructor}" : ''
   end
 
-  def as_indexed_json(options={})
+  def as_indexed_json(_options = {})
     as_json(
       only: [:id],
-      include: [:course, :reserve_location, :assigned_to, :items, :requester],
-      methods: [:short_course_code, :instructor_name]
+      include: %i[course reserve_location assigned_to items requester],
+      methods: %i[short_course_code instructor_name]
     )
   end
 end

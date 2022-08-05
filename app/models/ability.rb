@@ -2,14 +2,13 @@ class Ability
   include CanCan::Ability
 
   def initialize(user, params)
-
     if user.admin?
 
       if user.role == User::MANAGER_ROLE
         can :manage, :all
       elsif user.role == User::SUPERVISOR_ROLE
-        can :manage, [Request, Item,Course]
-        can [:read, :requests], User
+        can :manage, [Request, Item, Course]
+        can %i[read requests], User
 
         can :manage, AcquisitionRequest
 
@@ -19,10 +18,10 @@ class Ability
 
         can :login_as, :requestor
       else
-        can [:manage], [Request,Item]
-        can [:read, :requests], [User, Course, LoanPeriod, Location]
+        can [:manage], [Request, Item]
+        can %i[read requests], [User, Course, LoanPeriod, Location]
         can [:create], AcquisitionRequest
-        can [:read, :show, :update, :change_status], AcquisitionRequest
+        can %i[read show update change_status], AcquisitionRequest
 
         cannot :change_owner, Request do |r|
           r.reserve_location_id != user.location_id
@@ -32,35 +31,33 @@ class Ability
       can :login_as, :requestor
       can :search, :requests
     else
-      can [:read, :rollover_confirm, :rollover, :archive], Request, requester_id: user.id
+      can %i[read rollover_confirm rollover archive], Request, requester_id: user.id
 
       can :destroy, Request do |r|
         r.requester_id == user.id && r.status == Request::INCOMPLETE
       end
 
       can [:change_status], Request do |r|
-          r.requester_id == user.id && r.status == Request::COMPLETED && params[:status] == "open"
+        r.requester_id == user.id && r.status == Request::COMPLETED && params[:status] == 'open'
       end
 
       can :update, Request do |r|
         r.requester_id == user.id && (r.status == Request::OPEN || r.status == Request::INCOMPLETE)
       end
 
-      can [:read, :create], Item, request: { requester_id: user.id }
+      can %i[read create], Item, request: { requester_id: user.id }
       can [:update, :destroy], Item do |i|
         i.request.requester_id == user.id && (i.request.status == Request::OPEN || i.request.status == Request::INCOMPLETE)
       end
-      can [:read, :update, :requests], User, id: user.id
+      can %i[read update requests], User, id: user.id
 
       cannot :change_owner, Request
     end
 
-
     ##################### COMMON TO ALL ######################
 
-
     ## ADD NEW REQUEST
-    can [:step_one, :save, :step_two, :finish], :request
+    can %i[step_one save step_two finish], :request
 
     # can get back to login
     can :back_to_login, :requestor
@@ -73,11 +70,5 @@ class Ability
     cannot [:update, :destroy, :change_status], Item do |i|
       i.request.status == Request::CANCELLED || i.request.status == Request::COMPLETED
     end
-
-
-
-
-
-
   end
 end

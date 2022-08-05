@@ -1,16 +1,23 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: "Active Courses") do |sheet|
-  sheet.add_row ["Course Name","Code","Start Date", "End Date", "Instructor", "Library Branch"]
+wb.add_worksheet(name: 'Active Courses') do |sheet|
+  sheet.add_row ['Course Name', 'Code', 'Start Date', 'End Date', 'Instructor', 'Library Branch']
 
   @active_courses.each do |course|
     name = course.name
     code = course.code
     instructor = course.instructor
-    branch = course.reserve_locations.map { |l| l.name }.join(", ")
-    start_date = course.requests.first.reserve_start_date rescue "n/a"
-    end_date = course.requests.first.reserve_end_date rescue "n/a"
+    branch = course.reserve_locations.map { |l| l.name }.join(', ')
+    start_date = begin
+      course.requests.first.reserve_start_date
+    rescue StandardError
+      'n/a'
+    end
+    end_date = begin
+      course.requests.first.reserve_end_date
+    rescue StandardError
+      'n/a'
+    end
 
-    sheet.add_row [name, code, start_date, end_date, instructor, branch ]
-
+    sheet.add_row [name, code, start_date, end_date, instructor, branch]
   end
 end

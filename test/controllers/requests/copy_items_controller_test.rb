@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
+class Requests::CopyItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = create(:user, admin: true, role: User::MANAGER_ROLE)
     @to_request = create(:request, requester: @user)
@@ -9,19 +9,19 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
   end
 
   ### SHOW ###
-  should "show the form to copy items from request to request" do
+  should 'show the form to copy items from request to request' do
     other_requests = create_list(:request, 3, requester: @user)
 
     get request_copy_items_path(@to_request), xhr: true
     assert_response :success
     user_requests = get_instance_var(:user_requests)
     assert_not_nil user_requests
-    assert_equal other_requests.size, user_requests.size, "Should be same and not include the from request"
+    assert_equal other_requests.size, user_requests.size, 'Should be same and not include the from request'
   end
 
   ### NEW ####
 
-  should "only load active items" do
+  should 'only load active items' do
     r = create(:request)
     i = create_list(:item, 2, request: r, status: Item::STATUS_NOT_READY)
     i_del = create_list(:item, 3, request: r, status: Item::STATUS_DELETED)
@@ -32,7 +32,7 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
     assert_equal items.first.status, Item::STATUS_NOT_READY
   end
 
-  should "load request and items if custom id is specified" do
+  should 'load request and items if custom id is specified' do
     r = create(:request)
     i = create_list(:item, 2, request: r)
 
@@ -42,10 +42,10 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
     assert_not_nil items
     assert_not_nil from_request
 
-    assert_equal i.size, items.size, "Should load items"
+    assert_equal i.size, items.size, 'Should load items'
   end
 
-  should "load request and items if request is part of user requests" do
+  should 'load request and items if request is part of user requests' do
     r = create(:request, requester: @user)
     i = create_list(:item, 2, request: r)
 
@@ -55,10 +55,10 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
     assert_not_nil items
     assert_not_nil from_request
 
-    assert_equal i.size, items.size, "Should load items"
+    assert_equal i.size, items.size, 'Should load items'
   end
 
-  should "not load request and items if request is not part of user requests" do
+  should 'not load request and items if request is not part of user requests' do
     r = create(:request)
     i = create_list(:item, 2, request: r)
 
@@ -69,12 +69,11 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
     assert_nil from_request
     assert_not_nil items
 
-    assert_equal 0, items.size, "Should be no items"
+    assert_equal 0, items.size, 'Should be no items'
   end
 
-
   ### CREATE ###
-  should "copy the items from request " do
+  should 'copy the items from request ' do
     r = create(:request)
     i = create_list(:item, 2, request: r, status: Item::STATUS_READY)
 
@@ -85,5 +84,4 @@ class Requests::CopyItemsControllerTest <  ActionDispatch::IntegrationTest
     assert_equal i.size, request.items.size
     assert_redirected_to request_path(request)
   end
-
 end

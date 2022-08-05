@@ -1,29 +1,59 @@
-@import "twitter/bootstrap/variables";
-@import "twitter/bootstrap/mixins";
-@import "twitter/bootstrap/bootstrap";
-
-#active_courses   .heading { margin-bottom: 30px; }
+#active_courses .heading {
+  margin-bottom: 30px;
+}
 
 #active_courses .active-course {
   padding-bottom: 14px;
   margin-bottom: 20px;
   border-bottom: 1px solid #ddd;
-  .name { margin: 0 0 10px 0; font-weight: bold; }
 
-  .course-details, .item-details {
-    label { font-weight: 100; display: block; font-size: 10px; color: #999; }
-    .smaller { font-size: 12px; }
+  .name {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+  }
+
+  .course-details,
+  .item-details {
+    label {
+      font-weight: 100;
+      display: block;
+      font-size: 10px;
+      color: #999;
+    }
+
+    .smaller {
+      font-size: 12px;
+    }
+
     ul.horizontal {
       list-style: none;
-      li { float: left;  margin-right: 20px; width: 120px; }
-    }
-    .empty-field { padding-top: 0; color: #222;  }
 
-    td { width: 20%; label { margin-bottom: 0; margin-top: 10px; } }
+      li {
+        float: left;
+        margin-right: 20px;
+        width: 120px;
+      }
+    }
+
+    .empty-field {
+      padding-top: 0;
+      color: #222;
+    }
+
+    td {
+      width: 20%;
+
+      label {
+        margin-bottom: 0;
+        margin-top: 10px;
+      }
+    }
   }
 
 
 
-  .bg-grey { background: rgba(227,227, 227, 0.33); }
+  .bg-grey {
+    background: rgba(227, 227, 227, 0.33);
+  }
 
 }

@@ -1,48 +1,42 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: "Requests Report") do |sheet|
-
-  sheet.add_row ["ID", "Year", "Term", "Faculty", "Department", "Course Code", "Course Name", "Requester", "Instructor", "Enrollment", "Location", "Requested On", "Status", "Assigned To", "Items Count"]
-  @requests_grouped.each do |id, requests|
-
+wb.add_worksheet(name: 'Requests Report') do |sheet|
+  sheet.add_row ['ID', 'Year', 'Term', 'Faculty', 'Department', 'Course Code', 'Course Name', 'Requester',
+                 'Instructor', 'Enrollment', 'Location', 'Requested On', 'Status', 'Assigned To', 'Items Count']
+  @requests_grouped.each do |_id, requests|
     requests.each do |r|
-      assigned_to = r.assigned_to ? r.assigned_to.name : "Nobody"
+      assigned_to = r.assigned_to ? r.assigned_to.name : 'Nobody'
       sheet.add_row [r.id,
                      r.course.year,
                      r.course.term,
                      r.course.faculty,
-                     r.course.subject, 
+                     r.course.subject,
                      r.course.code,
                      r.course.name,
                      r.requester.name,
                      r.course.instructor,
                      r.course.student_count,
                      r.reserve_location.name,
-                      r.created_at.strftime("%b %d, %Y"), r.status.upcase, assigned_to, r.items.size]
+                     r.created_at.strftime('%b %d, %Y'), r.status.upcase, assigned_to, r.items.size]
     end
-
   end
 
   sheet.add_row []
   sheet.add_row []
-  sheet.add_row ["Report Parameters" ]
+  sheet.add_row ['Report Parameters']
   @report_params.each do |key, val|
-
-    if key == "location"
+    if key == 'location'
       l = Location.find_by_id(val)
-      val = l.name if l != nil
+      val = l.name unless l.nil?
     end
     sheet.add_row [key, val]
-
   end
 end
 
-wb.add_worksheet(name: "Location Stats") do |sheet|
+wb.add_worksheet(name: 'Location Stats') do |sheet|
+  sheet.add_row %w[Location Requests]
 
-  sheet.add_row ["Location", "Requests"]
-
-  @requests_grouped.each do |id, requests|
+  @requests_grouped.each do |_id, requests|
     r = requests.first
-    sheet.add_row [r.reserve_location.name, requests.size] if r != nil
+    sheet.add_row [r.reserve_location.name, requests.size] unless r.nil?
   end
-
 end

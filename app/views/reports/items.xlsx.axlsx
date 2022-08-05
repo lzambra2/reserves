@@ -1,73 +1,65 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: "Items Report") do |sheet|
-  sheet.add_row ["Request ID",
-                "Year", "Term", "Faculty", "Department",  "Course Code", "Instructor",
-                "Title", "Author", "ISBN", "Call Number", "Barcode",  "Publisher", "Publication Date",
-                "Edition", "Loan Period", "Metadata Source", "Status", "Item TYPE", "Location",
-                "Created", "URL"]
+wb.add_worksheet(name: 'Items Report') do |sheet|
+  sheet.add_row ['Request ID',
+                 'Year', 'Term', 'Faculty', 'Department',  'Course Code', 'Instructor',
+                 'Title', 'Author', 'ISBN', 'Call Number', 'Barcode',  'Publisher', 'Publication Date',
+                 'Edition', 'Loan Period', 'Metadata Source', 'Status', 'Item TYPE', 'Location',
+                 'Created', 'URL']
 
-  @items_grouped.each do |id, items|
-
+  @items_grouped.each do |_id, items|
     items.each do |i|
       r = i.request
       c = r.course
       sheet.add_row [r.id,
-                    c.year,
-                    c.term,
-                    c.faculty,
-                    c.subject,
-                    c.code,
-                    c.instructor,
-                    i.title,
-                    i.author,
-                    i.isbn,
-                    i.callnumber,
-                    i.ils_barcode,
-                    i.publisher,
-                    i.publication_date,
-                    i.edition,
-                    i.loan_period,
-                    i.metadata_source,
-                    i.status,
-                    i.item_type,
-                    r.reserve_location.name,
-                    i.created_at.strftime("%b %d, %Y"),
-                    i.url]
+                     c.year,
+                     c.term,
+                     c.faculty,
+                     c.subject,
+                     c.code,
+                     c.instructor,
+                     i.title,
+                     i.author,
+                     i.isbn,
+                     i.callnumber,
+                     i.ils_barcode,
+                     i.publisher,
+                     i.publication_date,
+                     i.edition,
+                     i.loan_period,
+                     i.metadata_source,
+                     i.status,
+                     i.item_type,
+                     r.reserve_location.name,
+                     i.created_at.strftime('%b %d, %Y'),
+                     i.url]
     end
-
   end
 
   sheet.add_row []
   sheet.add_row []
-  sheet.add_row ["Report Parameters" ]
+  sheet.add_row ['Report Parameters']
   @report_params.each do |key, val|
-
-    if key == "location"
+    if key == 'location'
       l = Location.find_by_id(val)
-      val = l.name if l != nil
+      val = l.name unless l.nil?
     end
     sheet.add_row [key, val]
-
   end
 end
 
-wb.add_worksheet(name: "Item Type Stats") do |sheet|
-
-  sheet.add_row ["Item Type", "Items"]
+wb.add_worksheet(name: 'Item Type Stats') do |sheet|
+  sheet.add_row ['Item Type', 'Items']
 
   @items_grouped.each do |type, items|
     sheet.add_row [type, items.size]
   end
-
 end
 
-wb.add_worksheet(name: "Items By Location") do |sheet|
+wb.add_worksheet(name: 'Items By Location') do |sheet|
+  sheet.add_row %w[Location Items]
 
-  sheet.add_row ["Location", "Items"]
-
-  @items_grouped_by_location.each do |location, items|
+  @items_grouped_by_location.each do |_location, items|
     r = items.first.request
-    sheet.add_row [r.reserve_location.name, items.size] if r != nil
+    sheet.add_row [r.reserve_location.name, items.size] unless r.nil?
   end
-
 end

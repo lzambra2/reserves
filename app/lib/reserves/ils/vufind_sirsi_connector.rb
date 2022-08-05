@@ -4,9 +4,6 @@ module Reserves
       def initialize(vufind_url)
         @vufind_url = vufind_url
       end
-      
-
     end
   end
-
 end
