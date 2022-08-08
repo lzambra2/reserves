@@ -67,7 +67,7 @@ class SessionsController < ApplicationController
     cookies.delete('mayaauth', domain: 'yorku.ca')
     cookies.delete('pybpp', domain: 'yorku.ca')
 
-    redirect_to 'http://www.library.yorku.ca'
+    redirect_to 'http://www.library.yorku.ca', allow_other_host: true
   end
 
   def invalid_login

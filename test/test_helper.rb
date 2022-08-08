@@ -1,6 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
+require 'shoulda/matchers'
 include ActionDispatch::TestProcess
 
 class ActiveSupport::TestCase
@@ -25,4 +26,10 @@ class ActionDispatch::IntegrationTest
   end
 
   def assert_template(which); end
+end
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :minitest
+    with.library :rails
+  end
 end

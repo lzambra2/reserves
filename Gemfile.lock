@@ -113,6 +113,7 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+    bigdecimal (1.3.5)
     bindex (0.8.1)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -194,7 +195,7 @@ GEM
       railties (>= 3.0.0)
     faker (2.22.0)
       i18n (>= 1.8.11, < 2)
-    faraday (1.10.0)
+    faraday (1.10.1)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -242,7 +243,7 @@ GEM
       guard (~> 2.8)
       guard-compat (~> 1.0)
       multi_json (~> 1.8)
-    guard-minitest (2.4.4)
+    guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
     hashie (5.0.0)
@@ -289,7 +290,7 @@ GEM
     mini_mime (1.1.2)
     mini_racer (0.6.2)
       libv8-node (~> 16.10.0.0)
-    minitest (5.16.2)
+    minitest (5.6.1)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.15.0)
@@ -345,6 +346,10 @@ GEM
       activesupport (= 7.0.3.1)
       bundler (>= 1.15.0)
       railties (= 7.0.3.1)
+    rails-controller-testing (1.0.5)
+      actionpack (>= 5.0.1.rc1)
+      actionview (>= 5.0.1.rc1)
+      activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -384,12 +389,12 @@ GEM
       tilt
     scrub_rb (1.0.1)
     shellany (0.0.1)
-    shoulda (3.5.0)
-      shoulda-context (~> 1.0, >= 1.0.1)
-      shoulda-matchers (>= 1.4.1, < 3.0)
-    shoulda-context (1.2.2)
-    shoulda-matchers (2.8.0)
-      activesupport (>= 3.0.0)
+    shoulda (4.0.0)
+      shoulda-context (~> 2.0)
+      shoulda-matchers (~> 4.0)
+    shoulda-context (2.0.0)
+    shoulda-matchers (4.5.1)
+      activesupport (>= 4.2.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -450,6 +455,7 @@ DEPENDENCIES
   axlsx_rails (= 0.1.5)
   bcrypt-ruby (~> 3.1.2)
   better_errors
+  bigdecimal (= 1.3.5)
   binding_of_caller
   bullet
   byebug
@@ -471,7 +477,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4.7)
   guard-bundler (~> 3.0)
   guard-livereload
-  guard-minitest (= 2.4.4)
+  guard-minitest (= 2.4.6)
   jbuilder (~> 2.5)
   jquery-rails (= 4.3.1)
   jquery-ui-rails (= 6.0.1)
@@ -480,7 +486,7 @@ DEPENDENCIES
   mime-types (= 1.25.1)
   mini_magick (= 3.7.0)
   mini_racer (~> 0.6.2)
-  minitest
+  minitest (= 5.6.1)
   mocha (= 0.14)
   mysql2 (= 0.5.3)
   populator!
@@ -488,15 +494,16 @@ DEPENDENCIES
   puma (~> 5.6, >= 5.6.4)
   rack-livereload
   rails (~> 7.0, >= 7.0.3.1)
+  rails-controller-testing (~> 1.0, >= 1.0.5)
   rails-settings-cached (~> 2.8, >= 2.8.2)
   rb-readline
   rsolr (= 1.0.10)
   ruby-prof
   rufus-scheduler (= 3.0.9)
   sass-rails (~> 6.0)
-  shoulda (= 3.5)
-  shoulda-context
-  shoulda-matchers
+  shoulda (~> 4.0)
+  shoulda-context (~> 2.0)
+  shoulda-matchers (~> 4.0)
   simple_form (~> 5.1)
   spring (= 1.3.6)
   sprockets (= 3.6.3)

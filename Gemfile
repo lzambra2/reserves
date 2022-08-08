@@ -32,6 +32,7 @@ gem 'simple_form', '~> 5.1'
 
 ## TOOLS AND UTILITIES ##
 gem 'audited', '~> 5.0'
+gem 'bigdecimal', '1.3.5'
 gem 'cancancan', '2.0.0'
 gem 'email_validator', '1.4.0'
 gem 'kaminari', '0.17.0'
@@ -78,13 +79,14 @@ group :test do
   gem 'database_cleaner', '1.2.0'
   gem 'factory_girl_rails', '4.3.0'
   gem 'faker'
-  gem 'guard-minitest', '2.4.4'
-  gem 'minitest'
+  gem 'guard-minitest', '2.4.6'
+  gem 'minitest', '5.6.1'
   gem 'mocha', '0.14', require: false
   gem 'rack-livereload'
-  gem 'shoulda', '3.5'
-  gem 'shoulda-context'
-  gem 'shoulda-matchers'
+  gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'
+  gem 'shoulda', '~> 4.0'
+  gem 'shoulda-context', '~> 2.0'
+  gem 'shoulda-matchers', '~> 4.0'
   gem 'webrat', '0.7.3'
 end
 
