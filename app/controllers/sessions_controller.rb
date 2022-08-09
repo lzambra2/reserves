@@ -2,15 +2,16 @@ class SessionsController < ApplicationController
   skip_authorization_check except: %i[login_as back_to_my_login]
 
   def new
+    current_user = request.env['warden'].authenticate!
+    session[:user_id] = current_user.id if current_user
+
     uid = request.headers['HTTP_PYORK_USER']
 
-    user = User.find_by_uid(uid)
+    user = current_user
 
     if user
 
       if user.active?
-        session[:user_id] = user.id
-        session[:username] = uid
         update_successful = user.update_external(request.headers['HTTP_PYORK_CYIN'])
         if update_successful
           user.audit_comment = 'Updated user information from ALMA'
@@ -46,7 +47,6 @@ class SessionsController < ApplicationController
       @user.save(validate: false)
 
       session[:user_id] = @user.id
-      session[:username] = @user.uid
 
       if update_successful
         UserMailer.welcome(@user).deliver_later unless @user.email.nil?
@@ -61,7 +61,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    session[:username] = nil
 
     cookies.delete('mayaauth', domain: 'yorku.ca')
     cookies.delete('pybpp', domain: 'yorku.ca')
@@ -92,7 +91,6 @@ class SessionsController < ApplicationController
       name = current_user.name
 
       session[:user_id] = requestor.id
-      session[:username] = requestor.uid
       session[:back_to_url] = request.referer
 
       ## updated audit trail
@@ -118,7 +116,6 @@ class SessionsController < ApplicationController
       requestor.save(validate: false)
 
       session[:user_id] = u.id
-      session[:username] = u.uid
       session[:back_to_id] = nil
 
       if session[:back_to_url].nil?

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   ## searchable Concern
   include Searchable
+  devise :registerable
 
   ## CONSTANTS
   FACULTY = 'FACULTY'

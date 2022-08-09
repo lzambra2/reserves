@@ -100,7 +100,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
       # session[:back_to_id] = @user.id
       # session[:user_id] = requestor.id
-      # session[:username] = requestor.uid
 
       get login_as_url, params: { who: requestor.id }
 
@@ -108,7 +107,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         get back_to_my_login_url
 
         assert_equal @user.id, session[:user_id], "user id should be #{@user.id}"
-        assert_equal @user.uid, session[:username], "username shoudl be #{@user.uid}"
         assert_nil session[:back_to_id], 'Back to id should be nil'
       end
     end
