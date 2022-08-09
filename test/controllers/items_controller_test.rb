@@ -111,10 +111,11 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal Item::STATUS_DELETED, i.status, 'Status should be changed to DELETED'
 
     [Request::COMPLETED, Request::OPEN, Request::INPROGRESS, Request::CANCELLED].each do |s|
-      item = create(:item, status: s)
-      get change_status_request_item_path(item.request, item), params: { status: Item::STATUS_DELETED }
-      i = get_instance_var(:item)
-      assert_not_equal Item::STATUS_DELETED, i.status, 'Status should be DELETED'
+      r = create(:request, status: s)
+      i = create(:item, request: r)
+      get change_status_request_item_path(r, i), params: { status: Item::STATUS_DELETED }
+      _i = get_instance_var(:item)
+      assert_not_equal Item::STATUS_DELETED, _i.status, 'Status should be be DELETED'
     end
   end
 
