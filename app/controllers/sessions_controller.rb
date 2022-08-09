@@ -11,7 +11,6 @@ class SessionsController < ApplicationController
       if user.active?
         session[:user_id] = user.id
         session[:username] = uid
-        pp request.headers['HTTP_PYORK_CYIN']
         update_successful = user.update_external(request.headers['HTTP_PYORK_CYIN'])
         if update_successful
           user.audit_comment = 'Updated user information from ALMA'
