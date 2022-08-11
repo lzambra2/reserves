@@ -4,61 +4,36 @@ class SessionsController < ApplicationController
 
   def new
     current_user = request.env['warden'].authenticate!
-    session[:user_id] = current_user.id if current_user
-    user = current_user
-
-    if user
-
-      if user.active?
-        update_successful = user.update_external(request.headers['HTTP_PYORK_CYIN'])
+    session[:user_id] = current_user.id if current_user.present?
+    if current_user
+      if current_user.active?
+        update_successful = current_user.update_external(request.headers['HTTP_PYORK_CYIN'])
         if update_successful
-          user.audit_comment = 'Updated user information from ALMA'
-          user.save(validate: false)
+          current_user.audit_comment = 'Updated user information from ALMA'
+          current_user.save(validate: false)
         end
 
         if session[:redirect_to].nil?
-          redirect_to root_url, notice: 'Logged in!' if user.admin?
-          redirect_to requests_user_url(user), notice: 'Welcome back!' unless user.admin?
+          redirect_to root_url, notice: 'Logged in!' if current_user.admin?
+          if current_user.name.nil? || current_user.phone.nil? || current_user.office.nil?
+            redirect_to edit_user_url(current_user), notice: 'Welcome! Please tell us about yourself.'
+          else
+            redirect_to requests_user_url(current_user), notice: 'Welcome back!' unless current_user.admin?
+          end
         else
           url = session[:redirect_to]
           session[:redirect_to] = nil
           redirect_to url, notice: 'Logged in!'
         end
-
       else
         redirect_to inactive_user_url, alert: 'Your Account Has Been Disabled'
       end
-
-    else
-      # user is new, lets make one
-      @user = User.new
-      # try prefilling
-      update_successful = @user.update_external(request.headers['HTTP_PYORK_CYIN'])
-
-      @user.admin = false
-      @user.active = true
-      @user.user_type = User::UNKNOWN if @user.user_type.nil?
-      @user.role = User::INSTRUCTOR_ROLE
-      @user.uid = uid
-      @user.audit_comment = 'Creating new auto-logged in user...from ALMA data'
-
-      @user.save(validate: false)
-
-      session[:user_id] = @user.id
-
-      if update_successful
-        UserMailer.welcome(@user).deliver_later unless @user.email.nil?
-        redirect_to requests_user_url(@user), notice: 'Welcome!'
-      else
-        redirect_to edit_user_url(@user), notice: 'Welcome! Please tell us about yourself.'
-      end
     end
-
-    # redirect_to invalid_login_url, alert:  "Invalid username or password #{uid}"
   end
 
   def destroy
     session[:user_id] = nil
+    request.env['warden'] = nil if request.env['warden'].present?
 
     cookies.delete('mayaauth', domain: 'yorku.ca')
     cookies.delete('pybpp', domain: 'yorku.ca')

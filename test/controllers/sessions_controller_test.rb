@@ -48,7 +48,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should "NEW USER, redirect to new user signup if user doesn't exist, no email should be sent yet" do
     ActionMailer::Base.deliveries.clear
-
+    get logout_url
     get login_url, headers: { "#{@cas_header}" => 'something_or_other', 'HTTP_PYORK_TYPE' => User::FACULTY }
     assert ActionMailer::Base.deliveries.empty?, "Should be empty, since we didn't get any details about user"
     assert_not_nil session[:user_id], 'Make sure user is logged in'

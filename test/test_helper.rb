@@ -4,10 +4,13 @@ require 'rails/test_help'
 require 'shoulda/matchers'
 include ActionDispatch::TestProcess
 
-class ActionDispatch::IntegrationTest
+class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
   include ActionMailer::TestHelper
   include ActiveJob::TestHelper
+end
+
+class ActionDispatch::IntegrationTest
   include Warden::Test::Helpers
   Devise::Test::IntegrationHelpers
   Warden.test_mode!
