@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user, params)
-    if user.admin?
+    if user && user.admin?
 
       if user.role == User::MANAGER_ROLE
         can :manage, :all
@@ -30,7 +30,7 @@ class Ability
 
       can :login_as, :requestor
       can :search, :requests
-    else
+    elsif user
       can %i[read rollover_confirm rollover archive], Request, requester_id: user.id
 
       can :destroy, Request do |r|

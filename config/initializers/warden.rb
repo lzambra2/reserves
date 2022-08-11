@@ -17,8 +17,7 @@ Warden::Strategies.add(:ppy_devise) do
 
   def authenticate!
     if valid?
-      resource = User.find_by('sisid = ? OR username = ?', request.headers[CAS_UID],
-                              request.headers[CAS_USERNAME])
+      resource = User.find_by('uid = ?', request.headers[CAS_USERNAME])
       if resource.present?
         success!(resource)
       else
@@ -31,6 +30,6 @@ Warden::Strategies.add(:ppy_devise) do
 
   ## returns true or false if the given user is found on MyPassport
   def valid?
-    !request.headers[CAS_UID].nil? || !request.headers[CAS_USERNAME].nil?
+    !request.headers[CAS_USERNAME].nil?
   end
 end

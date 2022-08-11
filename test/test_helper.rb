@@ -4,16 +4,13 @@ require 'rails/test_help'
 require 'shoulda/matchers'
 include ActionDispatch::TestProcess
 
-class ActiveSupport::TestCase
-  # Add more helper methods to be used by all tests here...
-  # include ActionDispatch::TestProcess
+class ActionDispatch::IntegrationTest
   include FactoryGirl::Syntax::Methods
   include ActionMailer::TestHelper
   include ActiveJob::TestHelper
-end
-
-class ActionDispatch::IntegrationTest
-  include ActionMailer::TestHelper
+  include Warden::Test::Helpers
+  Devise::Test::IntegrationHelpers
+  Warden.test_mode!
 
   def log_user_in(user)
     get login_url, headers: { 'HTTP_PYORK_USER' => user.uid }

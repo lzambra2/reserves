@@ -81,7 +81,7 @@ group :test do
   gem 'factory_girl_rails', '4.3.0'
   gem 'faker'
   gem 'guard-minitest', '2.4.6'
-  gem 'minitest', '5.6.1'
+  gem 'minitest', '~> 5.16', '>= 5.16.2'
   gem 'mocha', '0.14', require: false
   gem 'rack-livereload'
   gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'

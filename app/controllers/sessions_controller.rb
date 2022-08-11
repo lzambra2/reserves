@@ -1,12 +1,10 @@
 class SessionsController < ApplicationController
+  before_action :authenticate_user!, except: :destroy
   skip_authorization_check except: %i[login_as back_to_my_login]
 
   def new
     current_user = request.env['warden'].authenticate!
     session[:user_id] = current_user.id if current_user
-
-    uid = request.headers['HTTP_PYORK_USER']
-
     user = current_user
 
     if user
