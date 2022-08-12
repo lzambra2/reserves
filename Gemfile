@@ -6,7 +6,6 @@ gem 'rails', '~> 7.0', '>= 7.0.3.1'
 
 ## RAILS related ##
 gem 'bcrypt-ruby', '~> 3.1.2'
-gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
 gem 'sass-rails', '~> 6.0'
 gem 'sprockets', '3.6.3'
@@ -84,7 +83,6 @@ group :test do
   gem 'minitest', '~> 5.16', '>= 5.16.2'
   gem 'mocha', '0.14', require: false
   gem 'rack-livereload'
-  gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'
   gem 'shoulda', '~> 4.0'
   gem 'shoulda-context', '~> 2.0'
   gem 'shoulda-matchers', '~> 4.0'
