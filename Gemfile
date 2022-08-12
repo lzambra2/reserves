@@ -43,8 +43,8 @@ gem 'rufus-scheduler', '3.0.9'
 gem 'worldcatapi', git: 'https://github.com/taras-yorku/worldcatapi.git',
                    ref: 'ed6d0cb849e86a032dc84741a5d169da19b8e385'
 
-gem 'axlsx', '2.0.0'
-gem 'axlsx_rails', '0.1.5'
+gem 'caxlsx', '3.2.0'
+gem 'caxlsx_rails', '0.6.3'
 
 ## EX LIBRIS INTEGRATION ALMA, PRIMO
 gem 'alma'
