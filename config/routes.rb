@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   get 'search' => 'search#index', as: 'search'
 
@@ -54,6 +56,7 @@ Rails.application.routes.draw do
 
     get :staff, on: :new, action: :new_admin_user
   end
+  devise_for :users
 
   namespace :search do
     resource :primo, only: %i[new create show], controller: 'primo'

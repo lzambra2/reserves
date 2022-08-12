@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -11,7 +13,6 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find_by_id(session[:user_id]) if session[:user_id]
   end
-  helper_method :current_user
 
   def current_ability
     @current_ability ||= Ability.new(current_user, params)
@@ -36,6 +37,6 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to unauthorized_url, alert: "#{exception.message}"
+    redirect_to unauthorized_url, alert: exception.message.to_s
   end
 end

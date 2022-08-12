@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'rsolr'
 
@@ -7,7 +9,7 @@ class BibFindersController < ApplicationController
   def search_records
     if params[:term]
       term = params[:term]
-      @query_string = "#{term}"
+      @query_string = term.to_s
 
     else
       @query_string = ''

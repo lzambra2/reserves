@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   ## searchable Concern
   include Searchable
+  devise :registerable
 
   ## CONSTANTS
   FACULTY = 'FACULTY'
@@ -8,15 +11,15 @@ class User < ApplicationRecord
   UNDERGRAD = 'UNDERGRAD'
   STAFF = 'STAFF'
   UNKNOWN = 'unknown'
-  TYPES = [FACULTY, GRADUATE, UNDERGRAD, STAFF]
+  TYPES = [FACULTY, GRADUATE, UNDERGRAD, STAFF].freeze
 
   MANAGER_ROLE = 'manager'
   SUPERVISOR_ROLE = 'supervisor'
   STAFF_ROLE = 'staff'
   INSTRUCTOR_ROLE = 'instructor'
   STUDENT_ROLE = 'student'
-  STAFF_ROLES = [MANAGER_ROLE, SUPERVISOR_ROLE, STAFF_ROLE]
-  USER_ROLES = [INSTRUCTOR_ROLE, STUDENT_ROLE]
+  STAFF_ROLES = [MANAGER_ROLE, SUPERVISOR_ROLE, STAFF_ROLE].freeze
+  USER_ROLES = [INSTRUCTOR_ROLE, STUDENT_ROLE].freeze
 
   ## RELATIONSHIPS
   has_many :requests, foreign_key: 'requester_id', class_name: 'Request'
@@ -106,7 +109,7 @@ class User < ApplicationRecord
     begin
       data = JSON.parse(open(source).read)
 
-      self.name = data['firstname'].strip + ' ' + data['lastname'].strip
+      self.name = "#{data['firstname'].strip} #{data['lastname'].strip}"
       self.email = begin
         data['email'].strip
       rescue StandardError

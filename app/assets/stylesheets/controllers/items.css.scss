@@ -14,7 +14,7 @@ form {
 .item {
 	padding: 20px 20px;
 	font-size: 13px;
-	.box-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+	box-shadow: (0 0 4px rgba(0, 0, 0, 0.4));
 	margin-top: 12px;
 
 	.field {
@@ -70,7 +70,7 @@ form {
 
 .add-items {
 	border-bottom: 1px solid #F5F5F5;
-	.box-shadow(0 -1px 0 0 #ddd inset);
+	box-shadow: (0 -1px 0 0 #ddd inset);
 
 	.btn.add-title {
 		color: #222;

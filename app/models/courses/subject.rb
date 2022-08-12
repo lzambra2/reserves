@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Courses::Subject < ApplicationRecord
   ### IMPORTANT, DO NOT DELETE ###
   self.table_name_prefix = 'courses_'
 
-  SUBJECTS ||= IO.readlines("#{Rails.root}/lib/course_subjects.txt").collect { |s| s.strip }
+  SUBJECTS ||= IO.readlines("#{Rails.root}/lib/course_subjects.txt").collect(&:strip)
 
   ## VALIDATIONS
   validates_presence_of :code
@@ -15,7 +17,7 @@ class Courses::Subject < ApplicationRecord
     @all = Courses::Subject.pluck(:code)
 
     combined = SUBJECTS + @all
-    combined = combined.map { |c| c.upcase }.uniq
+    combined = combined.map(&:upcase).uniq
 
     combined.sort
 

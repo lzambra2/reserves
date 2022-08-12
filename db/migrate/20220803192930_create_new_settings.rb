@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateNewSettings < ActiveRecord::Migration[6.1]
   def self.up
     drop_table :settings

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :requests do
   desc 'Requests Task'
 
@@ -52,14 +54,14 @@ namespace :requests do
 
     if Setting.request_archive_all_allow == 'true'
 
-      archive = !(ENV['DRY_RUN'] == 'true')
+      archive = ENV['DRY_RUN'] != 'true'
 
       requests = Request.mass_archive(user.id, archive)
 
-      if requests.size > 0
+      if requests.size.positive?
         report 'The following requests have been removed automatically'
         report '----------'
-        report "IDs: #{requests.collect { |r| r.id }.join(',')}"
+        report "IDs: #{requests.collect(&:id).join(',')}"
         report '----------'
         report "Total: #{requests.size} request(s)"
 
@@ -87,14 +89,14 @@ namespace :requests do
 
     if Setting.request_remove_incomplete_allow.to_s == 'true'
 
-      remove = !(ENV['DRY_RUN'] == 'true')
+      remove = ENV['DRY_RUN'] != 'true'
 
       requests = Request.remove_incomplete(remove)
 
-      if requests.size > 0
+      if requests.size.positive?
         report 'The following INCOMPLETE requests have been removed permanently'
         report '----------'
-        report "IDs: #{requests.collect { |r| r.id }.join(',')}"
+        report "IDs: #{requests.collect(&:id).join(',')}"
         report '----------'
         report "Total: #{requests.size} request(s)"
 

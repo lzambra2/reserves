@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ItemsHelper
   def link_to_item_type_fields(name, type, f, association, css_classes = '')
     new_object = f.object.send(association).klass.new

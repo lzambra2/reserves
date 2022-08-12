@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
   def initialize(user, params)
-    if user.admin?
+    if user&.admin?
 
-      if user.role == User::MANAGER_ROLE
+      case user.role
+      when User::MANAGER_ROLE
         can :manage, :all
-      elsif user.role == User::SUPERVISOR_ROLE
+      when User::SUPERVISOR_ROLE
         can :manage, [Request, Item, Course]
         can %i[read requests], User
 
@@ -30,7 +33,7 @@ class Ability
 
       can :login_as, :requestor
       can :search, :requests
-    else
+    elsif user
       can %i[read rollover_confirm rollover archive], Request, requester_id: user.id
 
       can :destroy, Request do |r|

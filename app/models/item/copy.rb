@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Item::Copy
   def copy_items(from_request, to_request)
     if (from_request && to_request) && Request::OPEN_STATUSES.include?(to_request.status)

@@ -43,7 +43,7 @@
       </div>
     </div>
 
-  <% if @items.size > 0 %>
+  <% if @course.items.size > 0 %>
     <div class="text-center heading">
       <h3>Course Items</h3>
       <%= link_to courses_active_path(@course, format: "xlsx") do %>
@@ -54,7 +54,7 @@
 
 
     <table class="active-course table">
-      <% @items.each do |item| %>
+      <% @course.items.each do |item| %>
         <tr>
           <td colspan="4" class="item-details"><span class="name"><%= item.title %></span>
             <label>URL</label>

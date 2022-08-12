@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameArchivedFields < ActiveRecord::Migration[5.1]
   def change
     rename_column :requests, :archived_at, :removed_at
