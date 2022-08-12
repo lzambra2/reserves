@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AcquisitionRequest < ApplicationRecord
   ##### DB Fields for reference (update if changes)
   # "id", "item_id", "requested_by_id", "acquisition_reason", "status", "list_id", "location_id",
@@ -12,7 +14,7 @@ class AcquisitionRequest < ApplicationRecord
   STATUS_OPEN = 'open'
   STATUS_ACQUIRED = 'acquired'
   STATUS_CANCELLED = 'cancelled'
-  STATUSES = [STATUS_ACQUIRED, STATUS_CANCELLED]
+  STATUSES = [STATUS_ACQUIRED, STATUS_CANCELLED].freeze
 
   EMAIL_TO_BOOKSTORE = 'bookstore'
   EMAIL_TO_ACQUISITIONS = 'acquisitions_department'

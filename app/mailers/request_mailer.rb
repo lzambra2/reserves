@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RequestMailer < ApplicationMailer
   default from: Setting.email_from
 
@@ -13,7 +15,7 @@ class RequestMailer < ApplicationMailer
   end
 
   def status_change(request, current_user)
-    @template = Liquid::Template.parse(Setting.email_status_change_body)  # Parses and compiles the template
+    @template = Liquid::Template.parse(Setting.email_status_change_body) # Parses and compiles the template
 
     ## setup variables
     @date = Date.today.strftime('%b %e, %Y')
@@ -28,7 +30,7 @@ class RequestMailer < ApplicationMailer
     @location_name = request.reserve_location.name
     @location_email = request.reserve_location.contact_email
     @request_url = request_url(request)
-    @all_locations = Location.active.collect { |l| l.name }.join(', ')
+    @all_locations = Location.active.collect(&:name).join(', ')
 
     @request_comm_email = if request.requester_email.blank?
                             request.requester.email
@@ -63,7 +65,7 @@ class RequestMailer < ApplicationMailer
     @location_email = request.reserve_location.contact_email
     @request_url = request_url(request)
     @rollover_url = rollover_confirm_request_url(request)
-    @all_locations = Location.active.collect { |l| l.name }.join(', ')
+    @all_locations = Location.active.collect(&:name).join(', ')
 
     @request_comm_email = if request.requester_email.blank?
                             request.requester.email

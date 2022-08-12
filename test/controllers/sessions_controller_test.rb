@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
@@ -17,7 +19,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   should 'create a new session information if user logs in' do
     user = create(:user, uid: 'test', admin: true, role: User::MANAGER_ROLE)
 
-    get login_url, headers: { "#{@cas_header}" => user.uid }
+    get login_url, headers: { @cas_header.to_s => user.uid }
 
     assert_equal user.id, session[:user_id]
     assert_redirected_to root_url
@@ -26,7 +28,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'test redirection to a dashboard if the staff is logged in' do
     staff = create(:user, uid: '123123123', admin: true, role: User::STAFF_ROLE)
-    get login_url, headers: { "#{@cas_header}" => staff.uid }
+    get login_url, headers: { @cas_header.to_s => staff.uid }
 
     assert_equal staff.id, session[:user_id]
     assert_redirected_to root_url
@@ -34,7 +36,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'test redirection to a requests_user_url if the regulard user is logged in' do
     user = create(:user, uid: '123123123', admin: false)
-    get login_url, headers: { "#{@cas_header}" => user.uid }
+    get login_url, headers: { @cas_header.to_s => user.uid }
 
     assert_equal user.id, session[:user_id]
     assert_redirected_to requests_user_url(user)
@@ -42,14 +44,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'redirect to inactive if user is not active' do
     user = create(:user, uid: '123123123', admin: false, active: false)
-    get login_url, headers: { "#{@cas_header}" =>  user.uid }
+    get login_url, headers: { @cas_header.to_s =>  user.uid }
     assert_redirected_to inactive_user_url, 'Shold redirect to invalid login url'
   end
 
   should "NEW USER, redirect to new user signup if user doesn't exist, no email should be sent yet" do
     ActionMailer::Base.deliveries.clear
     get logout_url
-    get login_url, headers: { "#{@cas_header}" => 'something_or_other', 'HTTP_PYORK_TYPE' => User::FACULTY }
+    get login_url, headers: { @cas_header.to_s => 'something_or_other', 'HTTP_PYORK_TYPE' => User::FACULTY }
     assert ActionMailer::Base.deliveries.empty?, "Should be empty, since we didn't get any details about user"
     assert_not_nil session[:user_id], 'Make sure user is logged in'
 

@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
   def initialize(user, params)
-    if user && user.admin?
+    if user&.admin?
 
-      if user.role == User::MANAGER_ROLE
+      case user.role
+      when User::MANAGER_ROLE
         can :manage, :all
-      elsif user.role == User::SUPERVISOR_ROLE
+      when User::SUPERVISOR_ROLE
         can :manage, [Request, Item, Course]
         can %i[read requests], User
 

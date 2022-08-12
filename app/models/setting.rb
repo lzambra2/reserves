@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 

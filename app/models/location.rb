@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Location < ApplicationRecord
   # SETTING: setting_bcc_request_status_change
 

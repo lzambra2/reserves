@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LayoutHelper
   def title(page_title, show_title = true)
     content_for(:title) { h(page_title.to_s) }
@@ -31,7 +33,7 @@ module LayoutHelper
   end
 
   def blank_slate(list = nil, title: 'No items found', description: 'Click on new button to add new item.', icon: nil)
-    if list.nil? || list.size == 0
+    if list.nil? || list.size.zero?
       fa = icon.nil? ? '' : content_tag(:i, '', class: "fa fa-#{icon}")
       h4 = content_tag(:h4, title.html_safe)
       p = content_tag(:p, description.html_safe)

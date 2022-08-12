@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BibResult
   attr_accessor :title, :author, :isbn_issn, :callnumber, :publication_date, :publisher, :edition,
                 :item_type, :format, :map_index_num, :journal_title, :volume, :page_number,
@@ -70,7 +72,7 @@ class BibResult
     self.journal_title = get_value record[:pnx]['addata']['jtitle']
     self.volume = get_value record[:pnx]['addata']['volume']
     self.issue = get_value record[:pnx]['addata']['issue']
-    self.page_number = get_value(record[:pnx]['addata']['spage']) + ' ' + get_value(record[:pnx]['addata']['epage'])
+    self.page_number = "#{get_value(record[:pnx]['addata']['spage'])} #{get_value(record[:pnx]['addata']['epage'])}"
     self.url = get_value record[:pnx]['addata']['url']
 
     self.rtype = begin

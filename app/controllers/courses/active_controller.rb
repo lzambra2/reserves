@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Courses::ActiveController < ApplicationController
   authorize_resource Course
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RequestWizardController < ApplicationController
   before_action :set_request, only: %i[step_two finish]
   authorize_resource :request
@@ -33,7 +35,7 @@ class RequestWizardController < ApplicationController
   end
 
   def finish
-    if @request.items.size > 0
+    if @request.items.size.positive?
       @request.audit_comment = 'Request Step Two Completed'
       @request.status = Request::OPEN
       @request.requested_date = Date.today.to_date

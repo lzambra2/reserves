@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Settings::CourseFacultiesController < ApplicationController
   authorize_resource Setting
 

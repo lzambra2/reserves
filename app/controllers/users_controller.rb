@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy reactivate change_role]
   authorize_resource
@@ -28,19 +30,18 @@ class UsersController < ApplicationController
   end
 
   def requests
-    if !params[:removed].nil?
-      @requests = current_user.requests.removed
-      @requests_groups = @requests.group_by { |r| r.status }
-    else
-      @requests = current_user.requests
-      @requests_groups = @requests.group_by { |r| r.status }
-    end
+    @requests = if !params[:removed].nil?
+                  current_user.requests.removed
+                else
+                  current_user.requests
+                end
+    @requests_groups = @requests.group_by(&:status)
   end
 
   def admin_users
     @users = User.active.admin
     @inactive_users = User.inactive.admin
-    @user_groups = @users.group_by { |u| u.role }
+    @user_groups = @users.group_by(&:role)
     @staff_list = true
     render :index
   end

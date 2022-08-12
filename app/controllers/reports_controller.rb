@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReportsController < ApplicationController
   before_action :retrieve_params
   authorize_resource User
@@ -28,7 +30,7 @@ class ReportsController < ApplicationController
       @courses = @courses.where(code_term: @term) if @term.present?
       @courses = @courses.where(code_subject: @department) if @department.present?
       @courses = @courses.where(code_faculty: @faculty) if @faculty.present?
-      c_ids = @courses.collect { |c| c.id }.join(',')
+      c_ids = @courses.collect(&:id).join(',')
       @requests = @requests.where("course_id IN (#{c_ids})")
     end
 
@@ -41,7 +43,7 @@ class ReportsController < ApplicationController
     @requests = @requests.where('created_at <= ?', @created_before) unless @created_before.blank?
     @requests = @requests.where('created_at >= ?', @created_after) unless @created_after.blank?
 
-    @requests_grouped = @requests.group_by { |r| r.reserve_location_id }
+    @requests_grouped = @requests.group_by(&:reserve_location_id)
 
     respond_to do |format|
       format.html
@@ -63,10 +65,10 @@ class ReportsController < ApplicationController
       @courses = @courses.where(code_term: @term) if @term.present?
       @courses = @courses.where(code_subject: @department) if @department.present?
       @courses = @courses.where(code_faculty: @faculty) if @faculty.present?
-      c_ids = @courses.collect { |c| c.id }.join(',')
+      c_ids = @courses.collect(&:id).join(',')
       @requests = Request.where("course_id IN (#{c_ids})")
 
-      r_ids = @requests.collect { |r| r.id }.join(',')
+      r_ids = @requests.collect(&:id).join(',')
       @items = @items.where("request_id IN(#{r_ids})")
 
     end
@@ -81,15 +83,15 @@ class ReportsController < ApplicationController
 
     unless @location.blank?
       @requests = Request.where(reserve_location_id: @location)
-      r_ids = @requests.collect { |r| r.id }.join(',')
+      r_ids = @requests.collect(&:id).join(',')
       @items = @items.where("request_id IN(#{r_ids})")
     end
 
     @items = @items.where('created_at <= ?', @created_before) unless @created_before.blank?
     @items = @items.where('created_at >= ?', @created_after) unless @created_after.blank?
 
-    @items_grouped = @items.group_by { |i| i.item_type }
-    @items_grouped_by_location = @items.group_by { |i| i.request.reserve_location_id if i.request }
+    @items_grouped = @items.group_by(&:item_type)
+    @items_grouped_by_location = @items.group_by { |i| i.request&.reserve_location_id }
 
     respond_to do |format|
       format.html

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def app_version
     Reserves::Version.new.version
@@ -11,7 +13,7 @@ module ApplicationHelper
     new_object = f.object.send(association).klass.new
     id = new_object.object_id
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + 's/form_fields', f: builder)
+      render("#{association.to_s.singularize}s/form_fields", f: builder)
     end
     link_to(name, '#', class: "add_fields #{css_classes}", data: { id: id, fields: fields.gsub("\n", '') })
   end

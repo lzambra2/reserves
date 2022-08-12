@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocationsController < ApplicationController
   before_action :set_location, only: %i[show edit update destroy]
   authorize_resource
@@ -69,7 +71,7 @@ class LocationsController < ApplicationController
   end
 
   def location_params
-    params[:location][:disallowed_item_types].reject! { |t| t == '' } if params[:location][:disallowed_item_types]
+    params[:location][:disallowed_item_types]&.reject! { |t| t == '' }
     params.require(:location).permit(:name, :contact_email, :contact_phone,
                                      :setting_bcc_location_on_new_item, :setting_bcc_request_status_change, :acquisitions_email,
                                      :ils_location_name, :address, disallowed_item_types: [])

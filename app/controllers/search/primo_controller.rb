@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Search::PrimoController < ApplicationController
   include ApplicationHelper
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReportMailer < ApplicationMailer
   default from: Setting.email_from
 

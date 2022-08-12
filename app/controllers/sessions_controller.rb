@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < ApplicationController
   before_action :authenticate_user!, except: :destroy
   skip_authorization_check except: %i[login_as back_to_my_login]

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 require 'shoulda/matchers'
-include ActionDispatch::TestProcess
 
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods
@@ -11,6 +12,7 @@ class ActiveSupport::TestCase
 end
 
 class ActionDispatch::IntegrationTest
+  include ActionDispatch::TestProcess
   include Warden::Test::Helpers
   Devise::Test::IntegrationHelpers
   Warden.test_mode!
