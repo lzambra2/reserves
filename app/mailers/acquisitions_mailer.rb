@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AcquisitionsMailer < ApplicationMailer
   helper ItemsHelper
   helper RequestsHelper

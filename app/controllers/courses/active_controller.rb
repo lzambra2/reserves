@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Courses::ActiveController < ApplicationController
   authorize_resource Course
 
@@ -5,7 +7,6 @@ class Courses::ActiveController < ApplicationController
     @requests = Request.where('reserve_end_date >= ?', Date.today)
     @active_courses = Course.where('id in (?)',
                                    @requests.pluck(:id)).includes(:requests).includes(:reserve_locations).includes(requests: [:reserve_location])
-    # @active_courses = Course.active_courses.includes(:requests).includes(:reserve_locations).includes(requests: [:reserve_location])
 
     respond_to do |format|
       format.html
@@ -17,7 +18,6 @@ class Courses::ActiveController < ApplicationController
 
   def show
     @course = Course.find(params[:id])
-    @items = @course.items
 
     code = @course.code.delete(' ')
     respond_to do |format|

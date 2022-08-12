@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AcquisitionRequestsController < ApplicationController
   before_action :set_request, only: %i[show edit update destroy change_status send_to_acquisitions]
   authorize_resource
@@ -81,7 +83,8 @@ class AcquisitionRequestsController < ApplicationController
 
   ### CHANGE STATUS ###
   def change_status
-    if params[:status] == AcquisitionRequest::STATUS_ACQUIRED
+    case params[:status]
+    when AcquisitionRequest::STATUS_ACQUIRED
       @acquisition_request.status = AcquisitionRequest::STATUS_ACQUIRED
       @acquisition_request.acquired_at = Time.now
       @acquisition_request.acquired_by = current_user
@@ -89,7 +92,7 @@ class AcquisitionRequestsController < ApplicationController
 
       result = @acquisition_request.update(acquisition_request_params)
 
-    elsif params[:status] == AcquisitionRequest::STATUS_CANCELLED
+    when AcquisitionRequest::STATUS_CANCELLED
       @acquisition_request.status = AcquisitionRequest::STATUS_CANCELLED
       @acquisition_request.cancelled_at = Time.now
       @acquisition_request.cancelled_by = current_user

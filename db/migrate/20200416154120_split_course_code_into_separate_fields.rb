@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SplitCourseCodeIntoSeparateFields < ActiveRecord::Migration[5.1]
   def change
     add_column :courses, :code_year, :string

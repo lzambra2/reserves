@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :db do
   desc 'Database Populate Tasks, Test Data'
 
@@ -66,7 +68,7 @@ namespace :db do
       type_index += 1
     end
 
-    user_ids = User.all.collect { |u| u.id }
+    user_ids = User.all.collect(&:id)
 
     puts 'Prefil Requests, Items and Courses'
 
@@ -84,9 +86,10 @@ namespace :db do
         request.status = Request::STATUSES # pick from one
         request.requester_id = user_ids
 
-        if request.status == Request::COMPLETED
+        case request.status
+        when Request::COMPLETED
           request.completed_date = 3.days.ago
-        elsif request.status == Request::CANCELLED
+        when Request::CANCELLED
           request.cancelled_date = 1.week.ago
         end
 
@@ -105,7 +108,7 @@ namespace :db do
           item.publisher = ['Thompson', 'Bantam', 'Oxford University Press', 'Yale Press', 'York U Press']
           item.publication_date = 1999..2014
           item.provided_by_requestor = [true, false]
-          item.loan_period = LoanPeriod.all.collect { |p| p.duration }
+          item.loan_period = LoanPeriod.all.collect(&:duration)
           item.request_id = request.id
           item.status = [Item::STATUS_READY, Item::STATUS_NOT_READY]
           item.metadata_source = [Item::METADATA_MANUAL, Item::METADATA_SOLR, Item::METADATA_WORLDCAT]

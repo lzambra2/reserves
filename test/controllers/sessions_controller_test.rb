@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
+  include Warden::Test::Helpers
+  include Devise::Test::IntegrationHelpers
   setup do
     @cas_header = 'HTTP_PYORK_USER'
     @cas_alt_header = 'HTTP_PYORK_CYIN'
@@ -15,7 +19,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   should 'create a new session information if user logs in' do
     user = create(:user, uid: 'test', admin: true, role: User::MANAGER_ROLE)
 
-    get login_url, headers: { "#{@cas_header}" => user.uid }
+    get login_url, headers: { @cas_header.to_s => user.uid }
 
     assert_equal user.id, session[:user_id]
     assert_redirected_to root_url
@@ -24,9 +28,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'test redirection to a dashboard if the staff is logged in' do
     staff = create(:user, uid: '123123123', admin: true, role: User::STAFF_ROLE)
-    # @request.env["HTTP_PYORK_USER"] = staff.uid
-
-    get login_url, headers: { "#{@cas_header}" => staff.uid }
+    get login_url, headers: { @cas_header.to_s => staff.uid }
 
     assert_equal staff.id, session[:user_id]
     assert_redirected_to root_url
@@ -34,9 +36,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'test redirection to a requests_user_url if the regulard user is logged in' do
     user = create(:user, uid: '123123123', admin: false)
-    # @request.env["HTTP_PYORK_USER"] = user.uid
-
-    get login_url, headers: { "#{@cas_header}" => user.uid }
+    get login_url, headers: { @cas_header.to_s => user.uid }
 
     assert_equal user.id, session[:user_id]
     assert_redirected_to requests_user_url(user)
@@ -44,18 +44,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'redirect to inactive if user is not active' do
     user = create(:user, uid: '123123123', admin: false, active: false)
-    # @request.env['HTTP_PYORK_USER'] = user.uid
-
-    get login_url, headers: { "#{@cas_header}" =>  user.uid }
+    get login_url, headers: { @cas_header.to_s =>  user.uid }
     assert_redirected_to inactive_user_url, 'Shold redirect to invalid login url'
   end
 
   should "NEW USER, redirect to new user signup if user doesn't exist, no email should be sent yet" do
-    # @request.env['HTTP_PYORK_USER'] = "something_or_other"
-    # @request.env['HTTP_PYORK_TYPE'] = User::FACULTY
     ActionMailer::Base.deliveries.clear
-
-    get login_url, headers: { "#{@cas_header}" => 'something_or_other', 'HTTP_PYORK_TYPE' => User::FACULTY }
+    get logout_url
+    get login_url, headers: { @cas_header.to_s => 'something_or_other', 'HTTP_PYORK_TYPE' => User::FACULTY }
     assert ActionMailer::Base.deliveries.empty?, "Should be empty, since we didn't get any details about user"
     assert_not_nil session[:user_id], 'Make sure user is logged in'
 
@@ -100,7 +96,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
       # session[:back_to_id] = @user.id
       # session[:user_id] = requestor.id
-      # session[:username] = requestor.uid
 
       get login_as_url, params: { who: requestor.id }
 
@@ -108,7 +103,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         get back_to_my_login_url
 
         assert_equal @user.id, session[:user_id], "user id should be #{@user.id}"
-        assert_equal @user.uid, session[:username], "username shoudl be #{@user.uid}"
         assert_nil session[:back_to_id], 'Back to id should be nil'
       end
     end

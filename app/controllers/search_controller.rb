@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SearchController < ApplicationController
   include ApplicationHelper
 
@@ -54,7 +56,7 @@ class SearchController < ApplicationController
     else
       s = "%#{q}%"
       requests = Request.joins(:course, :requester)
-                        .where('courses.name LIKE ? OR courses.code LIKE ? OR courses.instructor LIKE ? OR users.name LIKE ?', "#{s}", "#{s}", "#{s}", "#{s}")
+                        .where('courses.name LIKE ? OR courses.code LIKE ? OR courses.instructor LIKE ? OR users.name LIKE ?', s.to_s, s.to_s, s.to_s, s.to_s)
                         .page(params[:page])
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Requests::CopyItemsController < ApplicationController
   before_action :set_request
   authorize_resource Request

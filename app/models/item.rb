@@ -1,6 +1,6 @@
-class Item < ApplicationRecord
-  # attr_accessor :title, :author, :isbn, :callnumber, :description, :publication_date, :publisher, :edition, :item_type, :copyright_options, :other_copyright_options, :format, :description, :url, :status, :provided_by_requestor, :map_index_num
+# frozen_string_literal: true
 
+class Item < ApplicationRecord
   ########################################### CONSTANTS ############################################
   METADATA_MANUAL = 'MANUAL'
   METADATA_SOLR = 'SOLR'
@@ -17,7 +17,7 @@ class Item < ApplicationRecord
   TYPE_PRINT_PERIODICAL = 'print_periodical'
 
   TYPES = [TYPE_BOOK, TYPE_EBOOK, TYPE_MULTIMEDIA, TYPE_COURSE_KIT, TYPE_PHOTOCOPY, TYPE_MAP, TYPE_EJOURNAL,
-           TYPE_PRINT_PERIODICAL]
+           TYPE_PRINT_PERIODICAL].freeze
 
   ## FORMAT
   FORMAT_CD = 'CD'
@@ -31,7 +31,7 @@ class Item < ApplicationRecord
   FORMAT_OTHER = 'OTHER'
   FORMAT_STREAMING = 'STREAMING'
 
-  MULTIMEDIA_FORMATS = [FORMAT_CD, FORMAT_DVD, FORMAT_VHS, FORMAT_LP, FORMAT_STREAMING]
+  MULTIMEDIA_FORMATS = [FORMAT_CD, FORMAT_DVD, FORMAT_VHS, FORMAT_LP, FORMAT_STREAMING].freeze
 
   ## COPYRIGHT OPTIONS
   COPYRIGHT_OPTIONS = defined?(Setting) ? Setting.item_copyright_options : nil

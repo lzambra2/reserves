@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :send do
   desc 'Database Populate Tasks, Test Data'
 

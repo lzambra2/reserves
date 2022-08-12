@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Request < ApplicationRecord
   ## searchable Concern
   include Searchable
@@ -10,11 +12,11 @@ class Request < ApplicationRecord
   CANCELLED = 'cancelled'
   REMOVED = 'removed'
   UPCYCLED = 'upcycled'
-  STATUSES = [OPEN, INPROGRESS, COMPLETED, CANCELLED]
+  STATUSES = [OPEN, INPROGRESS, COMPLETED, CANCELLED].freeze
 
-  OPEN_STATUSES = [INCOMPLETE, OPEN]
-  VISIBLE_STATUSES = [OPEN, INPROGRESS, COMPLETED, UPCYCLED]
-  CLOSED_STATUSES = [INPROGRESS, COMPLETED, CANCELLED, REMOVED, UPCYCLED]
+  OPEN_STATUSES = [INCOMPLETE, OPEN].freeze
+  VISIBLE_STATUSES = [OPEN, INPROGRESS, COMPLETED, UPCYCLED].freeze
+  CLOSED_STATUSES = [INPROGRESS, COMPLETED, CANCELLED, REMOVED, UPCYCLED].freeze
 
   ## RELATIONS
   has_many :items, inverse_of: :request
@@ -138,7 +140,7 @@ class Request < ApplicationRecord
   end
 
   def instructor_name
-    !course.nil? ? "#{course.instructor}" : ''
+    !course.nil? ? course.instructor.to_s : ''
   end
 
   def as_indexed_json(_options = {})

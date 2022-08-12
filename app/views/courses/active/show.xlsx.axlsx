@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 wb = xlsx_package.workbook
 wb.add_worksheet(name: 'Items Report') do |sheet|
   sheet.add_row ['Course ID', 'Type', 'Title', 'Author',
@@ -7,7 +9,7 @@ wb.add_worksheet(name: 'Items Report') do |sheet|
 
   course_code = @course.code
 
-  @items.each do |item|
+  @course.items.each do |item|
     type = item.item_type
     title = item.title
     author = item.author

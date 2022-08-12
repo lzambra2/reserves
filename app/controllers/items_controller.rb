@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemsController < ApplicationController
   before_action :set_request
   before_action :set_item, except: %i[index new create]
@@ -88,9 +90,10 @@ class ItemsController < ApplicationController
     @item.status = Item::STATUS_NOT_READY if @item.status.blank?
 
     # Toggle between ready or not ready.
-    if @item.status == Item::STATUS_NOT_READY
+    case @item.status
+    when Item::STATUS_NOT_READY
       @item.status = Item::STATUS_READY
-    elsif @item.status == Item::STATUS_READY
+    when Item::STATUS_READY
       @item.status = Item::STATUS_NOT_READY
     end
 

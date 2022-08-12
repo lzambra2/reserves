@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LoanPeriodsController < ApplicationController
   before_action :set_loan_period, only: %i[show edit update destroy]
   authorize_resource

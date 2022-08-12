@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RequestsController < ApplicationController
   before_action :set_request,
                 only: %i[show edit update destroy change_status change_owner assign rollover
@@ -91,7 +93,7 @@ class RequestsController < ApplicationController
       notice = "Status hasn't changed"
     end
 
-    if @request.errors.size == 0
+    if @request.errors.size.zero?
       redirect_to request_path(@request), notice: notice
     else
       render :edit, notice: 'There are required fields missing, please fill them in'

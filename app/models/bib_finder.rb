@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 
 class BibFinder
@@ -17,19 +19,20 @@ class BibFinder
   def add_primo_facets(type)
     resource_types = %w[books articles maps media dissertations images reviews]
 
-    if type == 'book'
+    case type
+    when 'book'
       @query.facet({ field: 'rtype', value: 'books' })
-    elsif type == 'ebook'
+    when 'ebook'
       @query.facet({ field: 'rtype', value: 'books' })
       @query.facet({ field: 'tlevel', value: 'online_resources' })
-    elsif type == 'multimedia'
+    when 'multimedia'
       @query.facet({ field: 'rtype', value: 'media' })
-    elsif type == 'map'
+    when 'map'
       @query.facet({ field: 'rtype', value: 'maps' })
-    elsif type == 'ejournal'
+    when 'ejournal'
       @query.facet({ field: 'rtype', value: 'journals' })
       @query.facet({ field: 'tlevel', value: 'online_resources' })
-    elsif type == 'print_periodical'
+    when 'print_periodical'
       @query.facet({ field: 'rtype', value: 'journals' })
     end
   end
@@ -42,7 +45,7 @@ class BibFinder
     records = sanitise_records(vufind_results, SOLR)
     records = records.first(max_number_of_results.to_i) # work around for now to the limititaion of VUfind RSS implementation
 
-    if records && records.size == 0 && Setting.worldcat_enable == 'true'
+    if records&.size&.zero? && Setting.worldcat_enable == 'true'
       worldcat_results = search_worldcat_for_results(search_string, max_number_of_results)
       records = sanitise_records(worldcat_results, WORLDCAT)
     end
@@ -51,17 +54,18 @@ class BibFinder
   end
 
   def search_vufind_for_results(query = '*:*', _number_of_records = 6, on = 'book')
-    filter_query = if on == 'book'
+    filter_query = case on
+                   when 'book'
                      'BookTitle'
-                   elsif on == 'ebook'
+                   when 'ebook'
                      'EBookTitle'
-                   elsif on == 'multimedia'
+                   when 'multimedia'
                      'MultimediaTitle'
-                   elsif on == 'map'
+                   when 'map'
                      'MapTitle'
-                   elsif on == 'ejournal'
+                   when 'ejournal'
                      'EJournalTitle'
-                   elsif on == 'print_periodical'
+                   when 'print_periodical'
                      'PrintPeriodicalTitle'
                    else
                      'BookTitle'
@@ -71,7 +75,7 @@ class BibFinder
     # url = "#{Setting.vufind_url}?json=true&view=rss&lookfor=#{URI.encode(query.squish)}&#{URI.encode(filter_query_expanded.squish)}"
 
     url = "#{Setting.vufind_url}?json=true&view=rss&lookfor=#{URI.encode(query.squish)}&type=#{URI.encode(filter_query.squish)}"
-    results = JSON.load(open(url))
+    results = JSON.parse(open(url))
   end
 
   def search_solr_for_results(query = '*:*', number_of_records = 5, on = 'book')
@@ -86,15 +90,16 @@ class BibFinder
 
     solr = RSolr.connect url: Setting.solr_url
 
-    if on == 'book'
+    case on
+    when 'book'
       query_fields = title_author_qf
       filter_query = ['source_str:Catalogue', 'format:("Book")']
 
-    elsif on == 'ebook'
+    when 'ebook'
       query_fields = title_author_qf
       filter_query = ['source_str:Catalogue', 'format:("eBook") OR format:("eReserves")']
 
-    elsif on == 'multimedia'
+    when 'multimedia'
       query_fields = title_author_qf
       filter_query = ['source_str:Catalogue', 'format:("Audio Compact Disc" OR "Audio Cassette" OR "Audio LP" OR "Audio Reel" OR "Audio 78 RPM"
          OR "CD-ROM" OR "DVD" OR "Streaming Audio" OR "Streaming Video" OR "Film" OR "Laserdisc"
@@ -102,12 +107,12 @@ class BibFinder
          OR "Data File" OR "Encyclopedia/Dictionary" OR "Slide" OR "Computer File"
         )']
 
-    elsif on == 'map'
+    when 'map'
       query_fields = title_author_qf
       filter_query = ['source_str:Catalogue', 'format:("map" OR "eMap" OR "Image")']
 
     # Note from Ali: Feature of limiting to eJournals postpond for later update
-    elsif on == 'ejournal'
+    when 'ejournal'
       query_fields = title_author_qf
       filter_query = ['source_str:Catalogue', 'format:("eJournal") OR format:("eReserves")']
 
@@ -117,7 +122,7 @@ class BibFinder
     end
 
     result = solr.get 'select', params: {
-      q: "#{query}",
+      q: query.to_s,
       defType: 'dismax',
       # :bf => "recip(ms(NOW,publishDateBoost_tdate),3.16e-11,1,1)^1.0",
       pf: 'title_txtP^100',
@@ -127,7 +132,7 @@ class BibFinder
       fq: filter_query
     }
 
-    if result['response']['numFound'] > 0
+    if (result['response']['numFound']).positive?
       result['response']['docs']
       # return result
     else
@@ -145,7 +150,7 @@ class BibFinder
     response = client.SRUSearch(query: "\"#{query}\"", maximumRecords: num)
     # response = client.OpenSearch(q: query, format: 'atom', start: 1, count: 5, cformat: "all")
 
-    if response.records.size > 0
+    if response.records.size.positive?
       response.records
     else
       []
@@ -158,7 +163,8 @@ class BibFinder
 
     sanitised_array = []
 
-    if source == SOLR
+    case source
+    when SOLR
 
       results.each do |r|
         # r.inspect
@@ -191,7 +197,7 @@ class BibFinder
 
       sanitised_array
 
-    elsif source == WORLDCAT
+    when WORLDCAT
 
       results.each do |wc|
         # wc.inspect

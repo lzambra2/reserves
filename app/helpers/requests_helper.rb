@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RequestsHelper
   def comm_email(_request)
     if @request.requester_email.nil?

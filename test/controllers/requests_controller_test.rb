@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class RequestsControllerTest < ActionDispatch::IntegrationTest
@@ -174,7 +176,6 @@ class RequestsControllerTest < ActionDispatch::IntegrationTest
 
     should 'be able to destroy own requests that are INCOMPLETE' do
       request = create(:request, requester: @user, status: Request::INCOMPLETE)
-
       assert_difference('Request.count', -1) do
         delete request_path(request)
       end

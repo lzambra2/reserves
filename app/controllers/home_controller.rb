@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HomeController < ApplicationController
   authorize_resource User
   before_action :redirect_if_regular_user
@@ -6,19 +8,20 @@ class HomeController < ApplicationController
     ### check which status we're extrating
     @which = params[:which] || Request::OPEN
 
-    @requests = if @which == Request::INPROGRESS
+    @requests = case @which
+                when Request::INPROGRESS
                   Request.in_progress
-                elsif @which == Request::COMPLETED
+                when Request::COMPLETED
                   Request.completed.order('completed_date desc')
-                elsif @which == Request::CANCELLED
+                when Request::CANCELLED
                   Request.cancelled.order('cancelled_date desc')
-                elsif @which == Request::REMOVED
+                when Request::REMOVED
                   Request.removed.order('removed_at desc')
-                elsif @which == Request::UPCYCLED
+                when Request::UPCYCLED
                   Request.upcycled.order('created_at desc')
-                elsif @which == Request::INCOMPLETE
+                when Request::INCOMPLETE
                   Request.incomplete.order('created_at desc')
-                elsif @which == 'expiring'
+                when 'expiring'
                   Request.expiring_soon
                 else
                   Request.open

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :courses do
   desc 'Courses Tasks'
 
