@@ -72,6 +72,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
   config.action_mailer.default_url_options = { host: 'reserves.dev' }
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.hosts << 'reserves.me.ca'
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
